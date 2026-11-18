@@ -6,6 +6,7 @@ Everything comes from the saved files in data/shared/; nothing is estimated or i
 """
 from dataclasses import dataclass
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -189,3 +190,49 @@ def load_market(root=ROOT, window_quarters=4):
     aliases = Path(root) / 'data/area_search_aliases.csv'
     market.aliases = pd.read_csv(aliases) if aliases.exists() else None
     return market
+
+
+def safe_float(value) -> float | None:
+    """Convert a value to float, returning None for NaN, Inf, or anything non-numeric."""
+    try:
+        f = float(value)
+        return None if not math.isfinite(f) else f
+    except (TypeError, ValueError):
+        return None
+
+
+def load_advisor_data(root=ROOT) -> dict[str, pd.DataFrame]:
+    """Return dictionary of raw DataFrames for advisor endpoints."""
+    shared = Path(root) / SHARED
+    missing = [name for name in ('monthly_sales.csv', 'market_trends.csv', 'forecasts.csv')
+               if not (shared / name).exists()]
+    if missing:
+        raise FileNotFoundError(
+            f"Required data files not found: {missing}. allocation.csv is not needed."
+        )
+    return {
+        'monthly': pd.read_csv(shared / 'monthly_sales.csv'),
+        'trends': pd.read_csv(shared / 'market_trends.csv'),
+        'forecasts': pd.read_csv(shared / 'forecasts.csv'),
+    }
+
+
+def latest_trends(trends: pd.DataFrame) -> pd.DataFrame:
+    """Return only the most recent quarter's trend rows."""
+    latest_q = trends["quarter"].max()
+    return trends[trends["quarter"] == latest_q].copy()
+
+
+def forecasts_for_quarter(forecasts: pd.DataFrame) -> pd.DataFrame:
+    """Return the latest forecast quarter's rows with ok or fallback status."""
+    latest_q = forecasts["forecast_quarter"].max() if "forecast_quarter" in forecasts.columns else None
+    active = forecasts[forecasts["status"].isin(["ok", "fallback"])]
+    if latest_q:
+        active = active[active["forecast_quarter"] == latest_q]
+    return active.copy()
+
+
+def known_areas(data: dict[str, pd.DataFrame]) -> list[str]:
+    """Sorted list of all areas that appear in at least one source file."""
+    all_areas = set(data["monthly"]["area"].unique())
+    return sorted(all_areas)

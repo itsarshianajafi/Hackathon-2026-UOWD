@@ -5,4 +5,11 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+plans/
+
+# Secrets — never commit these
 .env
+.env.local
+.env.*.local
+*.pem
+*.key
