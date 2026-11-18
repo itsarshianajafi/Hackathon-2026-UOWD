@@ -490,3 +490,12 @@
   align-items: center;
   gap: 6px;
 }
+
+/* chat docked: the header has less room, so the subtitle goes and the title stays on one line */
+.app.ai-docked .hdr-sub {
+  display: none;
+}
+.app.ai-docked .hdr-greet h1 {
+  white-space: nowrap;
+  font-size: 32px;
+}
