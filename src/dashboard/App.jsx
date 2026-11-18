@@ -11,6 +11,7 @@ import { Logo, Orb } from './components/Brand'
 
 import Dashboard from './pages/Dashboard'
 import Outlook from './pages/Outlook'
+import News from './pages/News'
 import Listings from './pages/Listings'
 import Viewings from './pages/Viewings'
 
@@ -22,7 +23,7 @@ import { buildMetrics } from './lib/metrics'
 import { money, uid } from './lib/format'
 import * as seed from './data/seed'
 
-const PAGES = { dashboard: Dashboard, outlook: Outlook, listings: Listings, viewings: Viewings }
+const PAGES = { dashboard: Dashboard, outlook: Outlook, news: News, listings: Listings, viewings: Viewings }
 
 const SEED_CLIENTS = 40
 

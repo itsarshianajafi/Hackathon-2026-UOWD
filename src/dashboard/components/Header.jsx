@@ -143,15 +143,12 @@ function Search() {
 export default function Header({ title, sub }) {
   const { go, view } = useApp()
   const slot = useRef(null)
-  const [pinLeft, setPinLeft] = useState(null)
 
   // once the header scrolls away, the logo stays put above the rail, like the rail itself
   useEffect(() => {
     const place = () => {
       const r = slot.current?.getBoundingClientRect()
-      const rail = document.querySelector('.rail')?.getBoundingClientRect()
-      const pinned = !!r && !!rail && r.top < PIN_TOP
-      setPinLeft(pinned ? { left: rail.left, width: rail.width } : null)
+      const pinned = !!r && r.top < PIN_TOP
       document.documentElement.classList.toggle('logo-pinned', pinned)
     }
     place()
@@ -170,8 +167,7 @@ export default function Header({ title, sub }) {
       <div className="hdr-logo-slot" ref={slot}>
         <button
           type="button"
-          className={`hdr-logo ${pinLeft != null ? 'pinned' : ''}`}
-          style={pinLeft ?? undefined}
+          className="hdr-logo"
           onClick={() => go('dashboard')}
           aria-label="Dashboard"
         >

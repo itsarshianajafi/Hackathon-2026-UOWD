@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import Icon from './Icon'
+import { Logo } from './Brand'
 import { useApp } from '../lib/store'
 import { navFor } from '../lib/nav'
 
@@ -45,6 +46,9 @@ export default function Rail() {
   return (
     <aside className="rail" aria-label="Sections" ref={group}>
       <span className="rail-ind" ref={ind} />
+      <button type="button" className="rail-logo" aria-label="Dashboard" tabIndex={-1} onClick={() => go('dashboard')}>
+        <Logo size={52} />
+      </button>
       <nav className="rail-top">
         {navFor(mode).map((r, i) => (
           <button

@@ -384,15 +384,27 @@
   width: 76px;
   height: 76px;
 }
-/* pinned, the logo becomes the top of the rail: one white column */
-.hdr-logo.pinned {
-  position: fixed;
-  top: 24px;
+/* pinned, the logo rides on top of the rail as its cap, so the two always line up */
+.rail-logo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
   height: 84px;
-  z-index: 40;
+  display: grid;
+  place-items: center;
   background: var(--card);
   border-radius: 40px 40px 0 0;
-  transform: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease);
+}
+.logo-pinned .rail-logo {
+  opacity: 1;
+  pointer-events: auto;
+}
+.logo-pinned .hdr-logo {
+  visibility: hidden;
 }
 .logo-pinned .rail {
   top: 108px;
