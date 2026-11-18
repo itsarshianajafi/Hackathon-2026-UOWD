@@ -13,7 +13,7 @@ Estaro AI, a Dubai property assistant for buyers and investors, and the shared a
 
 ## Running the project
 
-You need Node.js 20.9 or newer for the web app and Python 3.11 or newer for the pipeline.
+You need Node.js 24.x for the web app and Python 3.11 or newer for the pipeline.
 
 ### Web app
 
@@ -32,9 +32,20 @@ OPENAI_API_KEY=sk-...
 ESTARO_MODEL=gpt-4.1-mini
 ```
 
-`ESTARO_MODEL` is optional and defaults to `gpt-4.1-mini`. Booked viewings are kept in memory and reset when the server restarts.
+`ESTARO_MODEL` is optional and defaults to `gpt-4.1-mini`. Local viewings are saved in `web/.data/viewings.json`. When hosted on Vercel, bookings use Neon Postgres through `DATABASE_URL` instead.
 
 For a production build, run `npm run build` and then `npm start`.
+
+### Deploy to Vercel
+
+Deploy the merged `main` branch with **Root Directory `web`** and **Node.js 24.x**.
+Connect Neon Postgres and set `OPENAI_API_KEY` and `DATABASE_URL` in Vercel
+(not in Git). Initialize the booking table with `web/scripts/viewings.sql`.
+The site opens publicly without a username or password.
+
+See the [Vercel deployment guide](docs/deployment-vercel.md) for setup, preview
+isolation, verification, and demo limitations. `web/vercel.json` runs lint, unit
+tests, and the production build before each deployment.
 
 ### Data pipeline and tests
 

@@ -1,5 +1,8 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { randomUUID } from "node:crypto";
 import path from "node:path";
+import { neon } from "@neondatabase/serverless";
+import { loadViewings, saveViewings } from "./viewing-store.mjs";
+import { postgresViewings } from "./postgres-viewings.mjs";
 import areasFile from "@/data/areas.json";
 import listingsFile from "@/data/listings.json";
 import newsFile from "@/data/news.json";
@@ -64,19 +67,22 @@ export function matchBuyer(b: { budget: number; beds?: number; areas?: string[];
     .slice(0, 5);
 }
 
-// Saved to .data/viewings.json so bookings survive a server restart.
+// Local development uses a file; Vercel must use the shared Postgres database.
 const VIEWINGS_FILE = path.join(process.cwd(), ".data", "viewings.json");
 const store = globalThis as unknown as { viewings?: Viewing[] };
-export const viewings: Viewing[] = (store.viewings ??= existsSync(VIEWINGS_FILE) ? JSON.parse(readFileSync(VIEWINGS_FILE, "utf8")) : []);
+function localViewings(): Viewing[] {
+  if (process.env.VERCEL) throw new Error("DATABASE_URL must be configured for hosted bookings.");
+  return (store.viewings ??= loadViewings(VIEWINGS_FILE));
+}
 
-function saveViewings() {
-  mkdirSync(path.dirname(VIEWINGS_FILE), { recursive: true });
-  writeFileSync(VIEWINGS_FILE, JSON.stringify(viewings, null, 2));
+export async function listViewings(): Promise<Viewing[]> {
+  if (process.env.DATABASE_URL) return postgresViewings(neon(process.env.DATABASE_URL)).list();
+  return localViewings();
 }
 
 /** Two-hour slots, 10:00 to 16:00 Dubai time, over the next seven days, minus booked ones. */
-export function freeSlots(listingId: string, from = new Date()) {
-  const taken = new Set(viewings.filter((v) => v.listingId === listingId).map((v) => v.slot));
+export async function freeSlots(listingId: string, from = new Date()) {
+  const taken = new Set((await listViewings()).filter((v) => v.listingId === listingId).map((v) => v.slot));
   const slots: string[] = [];
   for (let d = 1; d <= 7; d++) {
     const date = new Date(from.getTime() + d * 86400000).toLocaleDateString("en-CA", { timeZone: "Asia/Dubai" });
@@ -114,13 +120,22 @@ export function rentalRoi(listingId: string, runningCostsShare = 0.25, price?: n
   };
 }
 
-export function bookViewing(listingId: string, slot: string, buyer: string) {
+export async function bookViewing(listingId: string, slot: string, buyer: string) {
   const listing = listings.find((l) => l.id === listingId);
   if (!listing) return { ok: false as const, error: `No listing ${listingId}` };
-  if (!freeSlots(listingId).includes(slot)) return { ok: false as const, error: "That slot is not available. Get free slots first." };
-  const viewing: Viewing = { id: `V${viewings.length + 1}`, listingId, title: listing.title, buyer, slot, bookedAt: new Date().toISOString() };
+  if (!(await freeSlots(listingId)).includes(slot)) return { ok: false as const, error: "That slot is not available. Get free slots first." };
+  const viewing: Viewing = { id: `V${randomUUID()}`, listingId, title: listing.title, buyer, slot, bookedAt: new Date().toISOString() };
+  if (process.env.DATABASE_URL) {
+    const saved = await postgresViewings(neon(process.env.DATABASE_URL)).insert(viewing);
+    return saved ? { ok: true as const, viewing: saved as Viewing } : { ok: false as const, error: "That slot was just booked. Get free slots again." };
+  }
+  // Recheck after the await above so concurrent local requests cannot take the same slot.
+  const viewings = localViewings();
+  if (viewings.some((v) => v.listingId === listingId && v.slot === slot)) {
+    return { ok: false as const, error: "That slot was just booked. Get free slots again." };
+  }
+  saveViewings(VIEWINGS_FILE, [...viewings, viewing]);
   viewings.push(viewing);
-  saveViewings();
   return { ok: true as const, viewing };
 }
 

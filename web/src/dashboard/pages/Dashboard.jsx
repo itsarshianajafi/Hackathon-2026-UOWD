@@ -16,7 +16,6 @@ const whole = (n) => Math.round(n).toLocaleString('en-US')
 const compact = (n) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : whole(n))
 const LEAVE_MS = 220
 const TYPE_COLORS = ['var(--sage)', 'var(--sand-ink)']
-const TONE = { Rising: 'up', Stable: 'sage', Declining: 'down' }
 
 const latest = quarterName(kpi.latest_quarter)
 const next = quarterName(kpi.forecast_quarter)

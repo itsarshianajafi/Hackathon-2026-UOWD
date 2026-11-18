@@ -9,7 +9,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "ESTARO — Where every space becomes home",
+  title: "Estaro AI",
   description: "ESTARO Real Estate. Expert agents, honest guidance and a clear path to the place that fits your life.",
 };
 

@@ -62,8 +62,6 @@ const store = (key, value) => {
   }
 }
 
-const sleep = (ms) => new Promise((r) => window.setTimeout(r, ms))
-
 export default function App() {
   /* ---------- appearance ---------- */
   const [theme, setTheme] = useState(() => {
@@ -120,20 +118,26 @@ export default function App() {
   }, [bootKey])
 
   /* ---------- routing ---------- */
-  const [view, setView] = useState(viewFromHash)
+  const [mode, setModeState] = useState(() => (new URLSearchParams(window.location.search).get('mode') === 'buyer' ? 'buyer' : 'investor'))
+  const allowedView = useCallback((id) => NAV.some((n) => n.id === id && n.modes.includes(mode)) ? id : 'dashboard', [mode])
+  const [view, setView] = useState(() => allowedView(viewFromHash()))
   useEffect(() => {
-    const onHash = () => setView(viewFromHash())
+    const onHash = () => setView(allowedView(viewFromHash()))
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
-  }, [])
+  }, [allowedView])
   const go = useCallback((id) => {
-    setView(id)
-    if (window.location.hash !== `#/${id}`) window.history.pushState(null, '', `#/${id}`)
+    const next = allowedView(id)
+    setView(next)
+    if (window.location.hash !== `#/${next}`) window.history.pushState(null, '', `#/${next}`)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [])
+  }, [allowedView])
+  const setMode = useCallback((next) => {
+    setModeState(next)
+    go('dashboard')
+  }, [go])
 
   /* ---------- data ---------- */
-  const [mode, setMode] = useState(() => (new URLSearchParams(window.location.search).get('mode') === 'buyer' ? 'buyer' : 'investor'))
   const admin = seed.PERSONAS[mode]
   const [daily, setDaily] = useState(() => seed.makeDaily())
   const [clients, setClients] = useState(() => seed.makeClients())
@@ -225,10 +229,6 @@ export default function App() {
   const closeModal = useCallback(() => setModal(null), [])
   const [signedOut, setSignedOut] = useState(false)
 
-  useEffect(() => {
-    if (!NAV.find((n) => n.id === view)?.modes.includes(mode)) go('dashboard')
-  }, [mode, view, go])
-
   /* ---------- Estaro chat ---------- */
   const [aiOpen, setAiOpen] = useState(false)
   // Estaro flies in once per page load before its button appears
@@ -275,6 +275,7 @@ export default function App() {
       const history = ctx.messages
         .filter((m) => m.text && m.status !== 'thinking')
         .map((m) => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }))
+        .slice(-39)
       const id = uid()
       setMessages((m) => [...m, { id: uid(), role: 'user', text: q }, { id, role: 'ai', status: 'thinking', text: '', blocks: [] }])
       setBusy(true)
@@ -366,7 +367,7 @@ export default function App() {
       toast, openModal, signOut,
     }),
     [
-      view, go, booting, theme, switchTheme, reduceMotion, admin, mode, daily, M, clients, addClient, removeClient,
+      view, go, booting, theme, switchTheme, reduceMotion, admin, mode, setMode, daily, M, clients, addClient, removeClient,
       transfers, sendTransfer, cards, events, notifications, live, liveOn, target, ai, ask, aiOpen, sageDot,
       speaking, spot, spotlight, toast, openModal, signOut,
     ],

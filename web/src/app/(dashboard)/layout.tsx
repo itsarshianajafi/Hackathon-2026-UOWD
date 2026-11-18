@@ -7,7 +7,7 @@ import "@/dashboard/styles/pages.css";
 import "@/dashboard/styles/mode.css";
 
 export const metadata: Metadata = {
-  title: "Estaro AI — Dubai property market",
+  title: "Estaro AI",
   description: "Dubai property intelligence dashboard",
 };
 

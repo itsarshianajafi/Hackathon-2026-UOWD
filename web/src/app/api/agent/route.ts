@@ -1,7 +1,7 @@
 import { openai } from "@ai-sdk/openai";
-import { generateText, stepCountIs, tool, type ModelMessage } from "ai";
+import { generateText, stepCountIs, tool } from "ai";
 import { z } from "zod";
-import { areas, bookViewing, rentalRoi, getNews, NEWS_TOPICS, findAreas, freeSlots, matchBuyer, meta, searchListings, viewings, type Area, type Listing } from "@/lib/market";
+import { areas, bookViewing, rentalRoi, getNews, NEWS_TOPICS, findAreas, freeSlots, matchBuyer, meta, searchListings, listViewings, type Area, type Listing } from "@/lib/market";
 
 const withChange = (a: Area) => ({
   ...a,
@@ -53,7 +53,7 @@ const tools = {
   get_available_slots: tool({
     description: "Free viewing slots for a listing over the next seven days (Dubai time).",
     inputSchema: z.object({ listingId: z.string() }),
-    execute: async ({ listingId }) => ({ slots: freeSlots(listingId).slice(0, 8) }),
+    execute: async ({ listingId }) => ({ slots: (await freeSlots(listingId)).slice(0, 8) }),
   }),
   book_viewing: tool({
     description: "Book a viewing. The slot must come from get_available_slots.",
@@ -76,7 +76,7 @@ const tools = {
   list_viewings: tool({
     description: "Viewings booked so far.",
     inputSchema: z.object({}),
-    execute: async () => ({ viewings }),
+    execute: async () => ({ viewings: await listViewings() }),
   }),
 };
 
@@ -97,9 +97,17 @@ Rules:
 - ${mode === "investor" ? "Lead with forecasts and area direction." : "Lead with what fits the budget today."}
 - The app shows every tool result as cards under your reply (listings, areas, slots, bookings). So reply in 1 to 3 short sentences: what you did, the one thing that matters most, and a next step. Do not list the listings or areas again, and use no numbered lists or tables.`;
 
+const requestSchema = z.object({
+  messages: z.array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().min(1).max(6000) })).min(1).max(40),
+  mode: z.enum(["buyer", "investor"]),
+  name: z.string().min(1).max(100),
+});
+
 export async function POST(req: Request) {
-  if (!process.env.OPENAI_API_KEY) return Response.json({ error: "OPENAI_API_KEY is not set in .env.local" }, { status: 500 });
-  const { messages, mode, name } = (await req.json()) as { messages: ModelMessage[]; mode: string; name: string };
+  const parsed = requestSchema.safeParse(await req.json().catch(() => null));
+  if (!parsed.success) return Response.json({ error: "Invalid chat request. Send up to 40 user/assistant messages." }, { status: 400 });
+  if (!process.env.OPENAI_API_KEY) return Response.json({ error: "Chat is not configured. Ask the owner to set OPENAI_API_KEY." }, { status: 503 });
+  const { messages, mode, name } = parsed.data;
   try {
     const result = await generateText({
       model: openai.chat(process.env.ESTARO_MODEL || "gpt-4.1-mini"),
@@ -107,10 +115,13 @@ export async function POST(req: Request) {
       messages,
       tools,
       stopWhen: stepCountIs(8),
+      maxOutputTokens: 1200,
+      abortSignal: AbortSignal.timeout(55_000),
     });
     const steps = result.steps.flatMap((s) => s.toolResults.map((r) => ({ tool: r.toolName, input: r.input, output: r.output })));
     return Response.json({ text: result.text, steps });
   } catch (e) {
-    return Response.json({ error: e instanceof Error ? e.message : "Agent failed" }, { status: 502 });
+    console.error("Agent request failed", e);
+    return Response.json({ error: "The agent could not complete this request. Please try again." }, { status: 502 });
   }
 }
