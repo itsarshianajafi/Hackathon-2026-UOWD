@@ -20,6 +20,21 @@ python -m unittest discover -s tests -v
 
 The backend and agent can load the validated snapshot with `from src.market_data import load_bundle`. It returns `monthly`, `trends`, `forecasts`, `forecast_manifest`, `quality`, and `names`. The frontend can consume those facts through the team's backend API.
 
+## Verified news
+
+Recent stories about the property market and city changes that can move prices (metro, roads, visa rules,
+fees, launches), from approved sources only: DLD, Dubai Media Office, WAM, RTA and Dubai Municipality, plus
+Gulf News, Khaleej Times, The National, Arabian Business and Zawya (`data/news_sources.csv`).
+
+```python
+from src.news.news import latest_news, news_for_area, NEWS_TOOL
+latest_news(topic='infrastructure')     # newest first, each with source, link, official/press, areas
+news_for_area('Dubai Marina')
+```
+
+Refresh with `python -m src.news.fetch --tag` (AI tags when `OPENAI_API_KEY` is set). Details:
+[docs/news.md](docs/news.md).
+
 Refresh the snapshot with a complete official export when needed.
 
 ```bash
