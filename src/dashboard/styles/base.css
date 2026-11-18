@@ -1,0 +1,748 @@
+/* ============================================================
+   Sage — design tokens
+   Light is the reference design (warm sand page, white cards,
+   sage green accents). Dark swaps in through data-theme.
+   ============================================================ */
+:root {
+  --font: 'DM Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+
+  --page: #ebeae5;
+  --card: #ffffff;
+  --soft: #f4f4f0;
+  --soft-2: #ecebe6;
+  --soft-3: #e0dfd9;
+  --line: #efeee9;
+  --line-2: #e3e2dc;
+  --wash: #eef0ec;
+
+  --ink: #1c1e1d;
+  --ink-2: #3a3e3c;
+  --muted: #8a8e8b;
+  --faint: #b9bcb8;
+
+  --solid: #1f2120;
+  --on-solid: #ffffff;
+
+  --sage: #5f7f69;
+  --sage-2: #8eab96;
+  --sage-3: #c9d6cc;
+  --sage-deep: #48644f;
+  --sage-soft: #e8eee9;
+  --sage-ink: #4b6853;
+
+  --sand: #f2e9da;
+  --sand-ink: #a9875a;
+
+  --up: #4f7a5c;
+  --up-bg: #e6eee8;
+  --down: #d0564c;
+  --down-bg: #fbe8e6;
+  --amber: #c9952e;
+  --amber-bg: #f8efd9;
+
+  --shadow-pop: 0 24px 60px -18px rgba(28, 32, 30, 0.22), 0 4px 14px -6px rgba(28, 32, 30, 0.08);
+  --shadow-soft: 0 10px 30px -14px rgba(40, 52, 44, 0.22);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --r-xl: 30px;
+  --r-lg: 24px;
+  --r-md: 16px;
+  --r-sm: 12px;
+
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --page: #0b0d0c;
+  --card: #161917;
+  --soft: #1e2220;
+  --soft-2: #262a28;
+  --soft-3: #323733;
+  --line: #222624;
+  --line-2: #2c312e;
+  --wash: #1c201e;
+
+  --ink: #eef1ee;
+  --ink-2: #ccd2cd;
+  --muted: #8b928d;
+  --faint: #565d58;
+
+  --solid: #eef1ee;
+  --on-solid: #121413;
+
+  --sage: #8fb39a;
+  --sage-2: #6f937b;
+  --sage-3: #33433a;
+  --sage-deep: #a9c8b2;
+  --sage-soft: rgba(143, 179, 154, 0.13);
+  --sage-ink: #a9c8b2;
+
+  --sand: rgba(214, 190, 150, 0.13);
+  --sand-ink: #d8bf95;
+
+  --up: #8fc29f;
+  --up-bg: rgba(143, 194, 159, 0.13);
+  --down: #f08079;
+  --down-bg: rgba(240, 128, 121, 0.13);
+  --amber: #e4b75a;
+  --amber-bg: rgba(228, 183, 90, 0.13);
+
+  --shadow-pop: 0 28px 70px -20px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-soft: 0 14px 36px -16px rgba(0, 0, 0, 0.7);
+  color-scheme: dark;
+}
+
+/* ============================================================
+   Reset
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* render the whole UI slightly smaller on desktop, like a 90% browser zoom.
+   Kept off the root so the liquid theme switch (on html) stays aligned. */
+@media (min-width: 721px) {
+  body {
+    zoom: 0.9;
+  }
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+input,
+select,
+textarea {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--sage);
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--sage) 30%, transparent);
+}
+
+svg {
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   Motion — entrance choreography
+   Cards land first as blank surfaces, then their content rises
+   in. --base is the intro offset, --d the card's slot, --i the
+   item's order inside the card.
+   ============================================================ */
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(6px);
+  }
+}
+
+@keyframes wordIn {
+  from {
+    opacity: 0;
+    transform: translateY(70%) rotate(2deg);
+    filter: blur(10px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(-22px);
+  }
+}
+
+@keyframes barGrow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes drawLine {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--down) 55%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 7px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes livePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.card {
+  position: relative;
+  background: var(--card);
+  border-radius: var(--r-lg);
+  padding: 22px 24px;
+  animation: cardIn 0.8s var(--ease) both;
+  animation-delay: calc(var(--base, 0ms) + var(--d, 0ms));
+  transition:
+    box-shadow 0.4s var(--ease),
+    transform 0.4s var(--ease);
+}
+
+.rv {
+  animation: rise 0.7s var(--ease) both;
+  animation-delay: calc(var(--base, 0ms) + var(--d, 0ms) + 260ms + var(--i, 0) * 75ms);
+}
+
+/* once a page has landed, anything new animates in quickly */
+.main.settled .card {
+  animation-delay: 0ms;
+}
+.main.settled .rv {
+  animation-delay: calc(var(--i, 0) * 25ms);
+}
+
+/* the assistant points at a card: a sage ring snaps onto it like a reticle.
+   Outline + transitions only, so the card's entrance never replays and
+   cards with overflow hidden still show it. */
+.card {
+  translate: 0 0;
+  outline: 2px solid transparent;
+  outline-offset: 16px;
+  transition:
+    translate 0.5s var(--ease),
+    box-shadow 0.5s var(--ease),
+    outline-color 0.35s ease,
+    outline-offset 0.7s var(--spring);
+}
+.card.spotlight {
+  z-index: 3;
+  translate: 0 -4px;
+  outline-color: var(--sage);
+  outline-offset: 5px;
+  box-shadow: 0 30px 60px -26px color-mix(in srgb, var(--sage) 85%, transparent);
+}
+
+/* ============================================================
+   Liquid theme switch (see lib/themeTransition.js)
+   ============================================================ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+html.liquid-switching *,
+html.liquid-switching *::before,
+html.liquid-switching *::after {
+  transition: none !important;
+}
+
+html.theme-fade *,
+html.theme-fade *::before,
+html.theme-fade *::after {
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease,
+    border-color 0.5s ease,
+    fill 0.5s ease !important;
+}
+
+[data-motion='reduced'] *,
+[data-motion='reduced'] *::before,
+[data-motion='reduced'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0ms !important;
+  transition-duration: 0.01ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   Shared atoms
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: var(--soft);
+  color: var(--ink);
+  font-size: 13.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    transform 0.25s var(--ease),
+    background-color 0.25s,
+    color 0.25s,
+    box-shadow 0.25s,
+    opacity 0.25s;
+}
+.btn:hover {
+  background: var(--soft-2);
+}
+.btn:active {
+  transform: scale(0.96);
+}
+.btn.sage {
+  background: linear-gradient(180deg, #7e9b87, #5b7a65);
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 8px 18px -10px rgba(72, 100, 79, 0.9);
+}
+.btn.sage:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 12px 24px -10px rgba(72, 100, 79, 0.95);
+  transform: translateY(-1px);
+}
+.btn.solid {
+  background: var(--solid);
+  color: var(--on-solid);
+}
+.btn.ghost {
+  background: transparent;
+  border: 1px solid var(--line-2);
+}
+.btn.ghost:hover {
+  background: var(--soft);
+}
+.btn.danger {
+  color: var(--down);
+  background: var(--down-bg);
+}
+.btn:disabled {
+  opacity: 0.45;
+  transform: none;
+  box-shadow: none;
+}
+.btn.sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 12.5px;
+  border-radius: 10px;
+}
+.btn.block {
+  width: 100%;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+  transition:
+    background-color 0.2s,
+    transform 0.25s var(--spring);
+}
+.icon-btn:hover {
+  background: var(--soft);
+}
+.icon-btn:active {
+  transform: scale(0.9);
+}
+.icon-btn.soft {
+  background: var(--soft);
+}
+
+.card-title {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+}
+.card-sub {
+  color: var(--muted);
+  font-size: 13.5px;
+}
+.muted {
+  color: var(--muted);
+}
+.mono {
+  font-variant-numeric: tabular-nums;
+}
+
+/* delta chip — +2.45% */
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.delta.up {
+  color: var(--up);
+  background: var(--up-bg);
+}
+.delta.down {
+  color: var(--down);
+  background: var(--down-bg);
+}
+
+.pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--soft);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.pill-tag i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.pill-tag.up {
+  background: var(--up-bg);
+  color: var(--up);
+}
+.pill-tag.down {
+  background: var(--down-bg);
+  color: var(--down);
+}
+.pill-tag.amber {
+  background: var(--amber-bg);
+  color: var(--amber);
+}
+.pill-tag.sage {
+  background: var(--sage-soft);
+  color: var(--sage-ink);
+}
+
+/* toggle switch */
+.toggle {
+  width: 42px;
+  height: 25px;
+  border-radius: 999px;
+  background: var(--soft-3);
+  position: relative;
+  flex-shrink: 0;
+  transition: background-color 0.3s;
+}
+.toggle i {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+  transition:
+    transform 0.4s var(--spring),
+    width 0.2s;
+}
+.toggle:active i {
+  width: 23px;
+}
+.toggle.on {
+  background: var(--sage);
+}
+.toggle.on i {
+  transform: translateX(17px);
+}
+.toggle.on:active i {
+  transform: translateX(13px);
+}
+
+/* segmented control */
+.seg {
+  position: relative;
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--soft);
+  gap: 2px;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.seg::-webkit-scrollbar {
+  display: none;
+}
+.seg button {
+  position: relative;
+  z-index: 1;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s;
+}
+.seg button:hover,
+.seg button.on {
+  color: var(--ink);
+}
+.seg button em {
+  font-style: normal;
+  font-size: 11px;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--soft-2);
+  color: var(--muted);
+}
+.seg-thumb {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  height: calc(100% - 8px);
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.14);
+  transition:
+    transform 0.5s var(--ease),
+    width 0.5s var(--ease);
+}
+
+/* forms */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.field > span {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.field small {
+  font-size: 12px;
+  color: var(--muted);
+}
+.field small.err {
+  color: var(--down);
+}
+.field input,
+.field select,
+.input {
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 13px;
+  border: 1px solid var(--line-2);
+  background: var(--card);
+  font-size: 14px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.field input:focus,
+.field select:focus,
+.input:focus {
+  border-color: var(--sage);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--sage) 16%, transparent);
+}
+.field select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) 50%,
+    calc(100% - 15px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 36px;
+}
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 40px 20px;
+  color: var(--muted);
+  animation: fadeIn 0.4s ease both;
+}
+.empty span {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--soft);
+  margin-bottom: 6px;
+}
+.empty strong {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.persona {
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  flex-shrink: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.anchor {
+  position: relative;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 6px 0;
+}
+
+kbd {
+  font-family: inherit;
+  font-size: 11px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 6px;
+  display: inline-grid;
+  place-items: center;
+  background: var(--soft);
+  border: 1px solid var(--line-2);
+  color: var(--muted);
+}
