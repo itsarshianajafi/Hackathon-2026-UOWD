@@ -1,0 +1,42 @@
+{
+  "as_of": "2026-11-01",
+  "register_projects": 3474,
+  "active_projects": 1237,
+  "status_projects": {
+    "typical": 408,
+    "overdue": 246,
+    "ahead_of_peers": 189,
+    "behind_peers": 187,
+    "unknown": 164,
+    "early": 43
+  },
+  "status_homes": {
+    "ahead_of_peers": 60209,
+    "behind_peers": 42897,
+    "early": 18586,
+    "overdue": 62385,
+    "typical": 114620,
+    "unknown": 55711
+  },
+  "english_name_share": 0.9927,
+  "building_ids_with_conflicting_names": 0,
+  "rules": {
+    "early_share": 0.25,
+    "peer_band": 0.1,
+    "min_peers": 20,
+    "behind_percentile": 0.25,
+    "ahead_percentile": 0.75
+  },
+  "inputs": [
+    {
+      "file": "projects_2026-11-01_18-17-23_0001.xlsx",
+      "sha256": "dec88b14d238012e0775adaaa75140d2957a2305be415039358f1efec85cc20e"
+    },
+    {
+      "file": "buildings_2026-11-17_17-51-17_0001.csv",
+      "sha256": "d498ae7ea7ec1444a31204d9dba62e623c65f1df71fb33ebecb435fc76cf7079"
+    }
+  ],
+  "note": "percent_completed is as DLD reports it; DLD does not publish when it was last updated.",
+  "prepared_at_utc": "2026-11-18T12:15:19.650247+00:00"
+}

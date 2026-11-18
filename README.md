@@ -20,6 +20,20 @@ python -m unittest discover -s tests -v
 
 The backend and agent can load the validated snapshot with `from src.market_data import load_bundle`. It returns `monthly`, `trends`, `forecasts`, `forecast_manifest`, `quality`, and `names`. The frontend can consume those facts through the team's backend API.
 
+## Off-plan handover check
+
+Is an off-plan project being delivered on schedule? `src/advisor/handover.py` compares each active project's
+progress with other Dubai projects at the same stage of their planned build time (DLD project register,
+`project_progress.csv`). Today 246 active projects (62,385 homes) are past their planned end date.
+
+```python
+from src.advisor.handover import project_check, area_handover, developer_check
+project_check('Samana')                    # status and a one-sentence verdict per matching project
+area_handover('Jumeirah Village Circle')   # 56% of homes being built are overdue or behind peers, vs 38% in Dubai
+```
+
+Method, results and limits: [docs/handover.md](docs/handover.md).
+
 Refresh the snapshot with a complete official export when needed.
 
 ```bash
