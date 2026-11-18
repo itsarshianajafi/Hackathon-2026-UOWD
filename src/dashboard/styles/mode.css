@@ -499,3 +499,17 @@
   white-space: nowrap;
   font-size: 32px;
 }
+
+/* the title never runs under the search bar: one line, cut with an ellipsis when space runs out */
+.hdr-greet {
+  min-width: 0;
+}
+.hdr-greet h1 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-bottom: 0.1em;
+}
+.hdr-greet h1 .word {
+  display: inline;
+}
