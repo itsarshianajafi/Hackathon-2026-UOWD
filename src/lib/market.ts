@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import areasFile from "@/data/areas.json";
 import listingsFile from "@/data/listings.json";
+import newsFile from "@/data/news.json";
 
 export type Area = (typeof areasFile.rows)[number];
 export type Listing = (typeof listingsFile.rows)[number];
@@ -121,4 +122,18 @@ export function bookViewing(listingId: string, slot: string, buyer: string) {
   viewings.push(viewing);
   saveViewings();
   return { ok: true as const, viewing };
+}
+
+export const NEWS_TOPICS = ["market_data", "supply", "infrastructure", "regulation", "economy"] as const;
+
+/** Newest stories from approved sources only (team news branch snapshot), filtered by topic, area or tier. */
+export function getNews(q: { topic?: string; area?: string; tier?: "official" | "press"; limit?: number }) {
+  const dld = q.area ? new Set(findAreas(q.area).map((a) => a.area)) : null;
+  if (q.area && !dld?.size) return { error: `No area called ${q.area}` };
+  const items = newsFile.items
+    .filter((i) => (!q.topic || i.topic === q.topic) && (!q.tier || i.tier === q.tier) && (!dld || i.areas.some((a) => dld.has(a))))
+    .sort((a, b) => b.published.localeCompare(a.published))
+    .slice(0, q.limit ?? 6)
+    .map((i) => ({ title: i.title, source: i.source_name, tier: i.tier, topic: i.topic, published: i.published, link: i.link, areas: i.areas }));
+  return { fetched_at: newsFile.fetched_at, count: items.length, items, note: "Approved sources only: DLD, Dubai Media Office, WAM, RTA, Dubai Municipality, and five newspapers." };
 }

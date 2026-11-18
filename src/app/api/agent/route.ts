@@ -1,7 +1,7 @@
 import { openai } from "@ai-sdk/openai";
 import { generateText, stepCountIs, tool, type ModelMessage } from "ai";
 import { z } from "zod";
-import { areas, bookViewing, rentalRoi, findAreas, freeSlots, matchBuyer, meta, searchListings, viewings, type Area, type Listing } from "@/lib/market";
+import { areas, bookViewing, rentalRoi, getNews, NEWS_TOPICS, findAreas, freeSlots, matchBuyer, meta, searchListings, viewings, type Area, type Listing } from "@/lib/market";
 
 const withChange = (a: Area) => ({
   ...a,
@@ -65,6 +65,14 @@ const tools = {
     inputSchema: z.object({ listingId: z.string(), runningCostsShare: z.number().min(0).max(0.9).optional(), price: z.number().optional() }),
     execute: async ({ listingId, runningCostsShare, price }) => rentalRoi(listingId, runningCostsShare, price),
   }),
+  get_news: tool({
+    description: "Recent Dubai property and city news from approved sources only (DLD, Dubai Media Office, WAM, RTA, Dubai Municipality, Gulf News, Khaleej Times, The National, Arabian Business, Zawya). Filter by topic, area or tier.",
+    inputSchema: z.object({
+      topic: z.enum(NEWS_TOPICS).optional(), area: z.string().optional(), tier: z.enum(["official", "press"]).optional(),
+      limit: z.number().int().max(10).optional(),
+    }),
+    execute: async (q) => getNews(q),
+  }),
   list_viewings: tool({
     description: "Viewings booked so far.",
     inputSchema: z.object({}),
@@ -83,6 +91,7 @@ Rules:
 - Money is in AED (UAE dirham), written like AED 1,250,000.
 - Listings are synthetic demo listings priced from real DLD price per m2. Say so if asked where they come from.
 - Market data is DLD sales to ${meta.dataTo}; ${meta.quarter} is provisional. Forecasts are for ${meta.forecastQuarter} and are a guide, not a promise.
+- For news, use get_news and name each story's source; never cite news from anywhere else.
 - For rent, ROI or what the buyer earns by renting a home out, use rental_roi and mention the running-costs assumption.
 - Before booking, get free slots and book only a slot from that list. Confirm with the date and time.
 - ${mode === "investor" ? "Lead with forecasts and area direction." : "Lead with what fits the budget today."}

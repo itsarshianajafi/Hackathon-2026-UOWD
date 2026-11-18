@@ -48,10 +48,10 @@
   transition: transform 0.6s var(--spring);
 }
 .hdr-logo:hover {
-  transform: rotate(45deg) scale(1.06);
+  transform: scale(1.04);
 }
 .hdr-logo:active {
-  transform: rotate(90deg) scale(0.92);
+  transform: scale(0.96);
 }
 [data-theme='dark'] .logo-mark {
   --logo: #9fc0a9;

@@ -19,6 +19,7 @@ const STEP_LABEL = {
   book_viewing: 'Booked a viewing',
   list_viewings: 'Read booked viewings',
   rental_roi: 'Worked out the rental return',
+  get_news: 'Checked verified news',
 }
 
 const THINKING = ['Reading the brief', 'Searching listings', 'Checking the market data', 'Almost there']

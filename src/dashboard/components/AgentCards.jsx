@@ -8,6 +8,18 @@ const TONE = { Rising: 'up', Stable: 'sage', Declining: 'down' }
 const when = (slot) =>
   new Date(slot).toLocaleString('en-GB', { timeZone: 'Asia/Dubai', weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 const MAX = 4
+const day = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+
+function NewsCard({ n, i }) {
+  return (
+    <a className="ac-card ac-news" href={n.link} target="_blank" rel="noreferrer" style={{ '--i': i }}>
+      <div className="ac-facts">
+        <span className={`pill-tag ${n.tier === 'official' ? 'up' : ''}`}>{n.tier}</span> {n.source} · {day(n.published)}
+      </div>
+      <strong>{n.title}</strong>
+    </a>
+  )
+}
 const pct = (x) => `${(x * 100).toFixed(1)}%`
 
 function RoiCard({ r }) {
@@ -93,6 +105,7 @@ function More({ n }) {
 /** Cards built from the agent's tool results, so every figure shown is the tool's own output. */
 export default function AgentCards({ steps, onAsk }) {
   const last = (tool) => [...steps].reverse().find((s) => s.tool === tool)?.output
+  const news = last('get_news')?.items ?? []
   const rois = steps.filter((s) => s.tool === 'rental_roi' && s.output?.ok).map((s) => s.output)
   const booked = steps.filter((s) => s.tool === 'book_viewing' && s.output?.ok).map((s) => s.output.viewing)
   const matched = last('match_buyer')?.matches
@@ -102,9 +115,12 @@ export default function AgentCards({ steps, onAsk }) {
   const slots = booked.length ? [] : (last('get_available_slots')?.slots ?? [])
   const viewings = last('list_viewings')?.viewings ?? []
 
-  if (!rois.length && !booked.length && !listings.length && !areas.length && !slots.length && !viewings.length) return null
+  if (!news.length && !rois.length && !booked.length && !listings.length && !areas.length && !slots.length && !viewings.length) return null
   return (
     <div className="agent-cards">
+      {news.slice(0, MAX).map((n, i) => (
+        <NewsCard key={n.link} n={n} i={i} />
+      ))}
       {rois.map((r) => (
         <RoiCard key={r.listingId + r.price_aed} r={r} />
       ))}

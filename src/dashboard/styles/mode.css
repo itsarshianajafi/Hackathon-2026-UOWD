@@ -392,6 +392,7 @@
   z-index: 40;
   background: var(--card);
   border-radius: 40px 40px 0 0;
+  transform: none;
 }
 .logo-pinned .rail {
   top: 108px;
@@ -428,4 +429,52 @@
 }
 [data-theme='dark'] .logo-white {
   display: block;
+}
+
+/* verified news under the market outlook */
+.outlook-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.news-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.news-item:hover {
+  background: var(--soft);
+  border-color: var(--line-2);
+}
+.news-item strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.news-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.ac-news {
+  text-decoration: none;
+}
+.ac-news .ac-facts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
