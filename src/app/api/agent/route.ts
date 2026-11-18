@@ -102,7 +102,7 @@ export async function POST(req: Request) {
   const { messages, mode, name } = (await req.json()) as { messages: ModelMessage[]; mode: string; name: string };
   try {
     const result = await generateText({
-      model: openai.chat("gpt-4.1-mini"),
+      model: openai.chat(process.env.OPENAI_MODEL || "gpt-4.1-mini"),
       system: system(mode, name),
       messages,
       tools,
