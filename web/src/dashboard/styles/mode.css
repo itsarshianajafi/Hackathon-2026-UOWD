@@ -1,0 +1,515 @@
+/* Investor / buyer switch in the header: the original segmented control, sized to the header buttons. */
+.seg.mode-seg {
+  padding: 6px;
+  background: var(--card);
+  box-shadow: var(--shadow-soft);
+}
+.seg.mode-seg button {
+  height: 44px;
+  padding: 0 20px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+.seg.mode-seg button.on {
+  color: var(--on-solid);
+}
+.seg.mode-seg .seg-thumb {
+  top: 6px;
+  height: calc(100% - 12px);
+  background: var(--solid);
+}
+
+/* KPI cards: the outgoing set fades out before the next set plays the usual card entrance. */
+@keyframes cardOut {
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+.dash.leaving .card {
+  animation: cardOut 0.22s var(--ease) forwards;
+}
+.kpi-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.dash-data {
+  margin-top: 18px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.main.settled .kpi-card {
+  animation-delay: var(--d, 0ms);
+}
+.kpi-card {
+  align-items: flex-start;
+}
+
+/* Outlook, listings and viewings pages */
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.page-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.tbl-row[title] {
+  cursor: pointer;
+}
+.up-txt {
+  color: var(--up);
+}
+.down-txt {
+  color: var(--down);
+}
+.empty-note {
+  margin-top: 18px;
+}
+.listing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 22px;
+}
+.listing-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.listing-top {
+  display: flex;
+  gap: 6px;
+}
+.listing-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.listing-price {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  font-variant-numeric: tabular-nums;
+}
+.listing-facts {
+  font-size: 13px;
+}
+.listing-card .btn {
+  align-self: flex-start;
+  margin-top: 6px;
+}
+
+/* agent steps under an Estaro answer */
+.agent-steps {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.agent-steps li {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--sage-soft);
+  color: var(--sage-ink);
+}
+.agent-steps li.failed {
+  background: var(--down-bg);
+  color: var(--down);
+}
+
+/* Dashboard rows under the KPI tiles */
+.dash .span-1 {
+  grid-column: span 1;
+}
+.dash .span-2 {
+  grid-column: span 2;
+}
+.dash .span-3 {
+  grid-column: span 3;
+  min-width: 0;
+}
+@container (max-width: 1060px) {
+  .dash .span-3,
+  .dash .span-1 {
+    grid-column: span 2;
+  }
+}
+@container (max-width: 600px) {
+  .dash .span-1,
+  .dash .span-2,
+  .dash .span-3 {
+    grid-column: auto;
+  }
+}
+.rank-list,
+.ask-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 12px;
+}
+.rank-row,
+.ask-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 8px;
+  border-radius: 12px;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.rank-row:hover,
+.ask-row:hover {
+  background: var(--soft);
+}
+.rank-row em {
+  font-style: normal;
+  width: 22px;
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.rank-name {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.rank-name strong {
+  font-weight: 600;
+  font-size: 14.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rank-name small {
+  font-size: 12px;
+  color: var(--muted);
+}
+.rank-val {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.rank-val b {
+  font-weight: 600;
+}
+.ask-row {
+  font-size: 14px;
+}
+.ask-row > span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 10px;
+  background: var(--soft);
+  color: var(--sage-deep);
+}
+.next-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 16px;
+}
+.next-ic {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: var(--sage-soft);
+  color: var(--sage-deep);
+}
+.next-body strong {
+  font-size: 16px;
+}
+
+/* Estaro answer cards, built from tool results */
+.agent-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.ac-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  animation: rise 0.5s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+.ac-area {
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.ac-area:hover {
+  background: var(--soft);
+}
+.ac-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ac-top strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+.ac-price {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  font-variant-numeric: tabular-nums;
+}
+.ac-facts {
+  font-size: 12px;
+  color: var(--muted);
+}
+.ac-why {
+  font-size: 12px;
+  color: var(--sage-ink);
+}
+.ac-card .btn {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+.ac-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 6px;
+}
+.ac-grid span {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+.ac-grid small {
+  width: 100%;
+  font-size: 11px;
+  color: var(--muted);
+}
+.ac-grid b {
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.ac-booked {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  background: var(--sage-soft);
+  border-color: transparent;
+}
+.ac-booked > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ac-booked small {
+  font-size: 11px;
+  color: var(--sage-ink);
+}
+.ac-ic {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--sage-deep);
+}
+.ac-more {
+  font-size: 12px;
+  color: var(--muted);
+  padding-left: 4px;
+}
+.ac-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ac-slot {
+  font: inherit;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+.ac-slot:hover {
+  background: var(--soft);
+}
+
+/* Logo pinned above the rail once the header scrolls away (desktop presentation) */
+.hdr-logo-slot {
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+}
+/* pinned, the logo rides on top of the rail as its cap, so the two always line up */
+.rail-logo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 84px;
+  display: grid;
+  place-items: center;
+  background: var(--card);
+  border-radius: 40px 40px 0 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease);
+}
+.logo-pinned .rail-logo {
+  opacity: 1;
+  pointer-events: auto;
+}
+.logo-pinned .hdr-logo {
+  visibility: hidden;
+}
+.logo-pinned .rail {
+  top: 108px;
+  height: calc(100vh - 132px);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.ac-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.ac-roi {
+  border-color: var(--sage-soft);
+}
+.pr-rent {
+  font-size: 12.5px;
+  color: var(--sage-ink);
+  margin: 2px 0 8px;
+}
+
+.logo-mark {
+  display: grid;
+  place-items: center;
+}
+.logo-mark img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.logo-white,
+[data-theme='dark'] .logo-ink {
+  display: none;
+}
+[data-theme='dark'] .logo-white {
+  display: block;
+}
+
+/* verified news under the market outlook */
+.outlook-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.news-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.news-item:hover {
+  background: var(--soft);
+  border-color: var(--line-2);
+}
+.news-item strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.news-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.ac-news {
+  text-decoration: none;
+}
+.ac-news .ac-facts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* chat docked: the header has less room, so the subtitle goes and the title stays on one line */
+.app.ai-docked .hdr-sub {
+  display: none;
+}
+.app.ai-docked .hdr-greet h1 {
+  white-space: nowrap;
+  font-size: 32px;
+}
+
+/* the title never runs under the search bar: one line, cut with an ellipsis when space runs out */
+.hdr-greet {
+  min-width: 0;
+}
+.hdr-greet h1 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-bottom: 0.1em;
+}
+.hdr-greet h1 .word {
+  display: inline;
+}

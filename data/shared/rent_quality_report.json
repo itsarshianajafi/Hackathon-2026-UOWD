@@ -1,0 +1,29 @@
+{
+  "input_rows": 1951160,
+  "duplicate_rows": 0,
+  "multi_property_rows": 367650,
+  "not_residential_home_rows": 491209,
+  "invalid_rows": 1809,
+  "small_area_rows": 33874,
+  "output_rows": 1090492,
+  "monthly_rows": 55573,
+  "month_min": "2007-01",
+  "month_max": "2026-11",
+  "contract_types": {
+    "Renewal": 585602,
+    "New": 504890
+  },
+  "inputs": [
+    {
+      "file": "rent_contracts_2026-11-17_18-04-26_0001.csv",
+      "sha256": "d0ccec65c1f7f7dbe05b1769d1d2d7a1e5cc3d24e00c8c547100f9ac4739d47d"
+    },
+    {
+      "file": "rent_contracts_2026-11-17_18-04-26_0002.csv",
+      "sha256": "2c744d5aea70a69ab8b8630e0374e6e240ce60a111e1772531d16c04f349f4d8"
+    }
+  ],
+  "coverage_note": "Contracts in the supplied export only; DLD press totals are higher, so this may not be every Ejari contract.",
+  "prepared_at_utc": "2026-11-18T11:40:21.113280+00:00",
+  "pandas_version": "2.3.2"
+}
