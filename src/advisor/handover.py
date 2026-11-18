@@ -1,8 +1,11 @@
 """Off-plan handover check: is a project, an area or a developer delivering on schedule?
 
     python -m src.advisor.handover --project "Samana Sky Views"
-    python -m src.advisor.handover --area "Jumeirah Village Circle"
+    python -m src.advisor.handover --area JVC              # or "Jumeirah Village Circle" or the DLD name
     python -m src.advisor.handover --developer 2420
+
+For the backend and agent: area_handover, developer_check and project_summary return JSON-safe dicts;
+HANDOVER_TOOL is an OpenAI tool definition and get_handover(**arguments) answers it.
 
 Reads data/shared/project_progress.csv and developer_handover.csv, built from DLD's project register by
 src.dld_data.projects. A project is compared with peers: the other active Dubai projects at the same
@@ -14,6 +17,8 @@ from dataclasses import dataclass
 import difflib
 import json
 from pathlib import Path
+import re
+import sys
 
 import pandas as pd
 
@@ -68,16 +73,29 @@ def verdict(row):
 
 
 def _rows(frame):
+    """The rows with a verdict sentence each. An empty frame stays empty (no overdue projects is normal)."""
     out = frame.copy()
-    out['verdict'] = out.apply(verdict, axis=1)
+    out['verdict'] = [verdict(row) for row in out.itertuples(index=False)]
     return out
 
 
+def _records(frame, columns):
+    """JSON-safe list of dicts: empty cells become null and numbers plain Python, so FastAPI can send them."""
+    return json.loads(frame[columns].to_json(orient='records', force_ascii=False))
+
+
+PROJECT_FIELDS = ['project_number', 'project_name_en', 'area', 'developer_number', 'homes', 'percent_completed',
+                  'planned_start', 'planned_end', 'time_elapsed_share', 'peer_count', 'peer_median_progress',
+                  'progress_percentile', 'status', 'months_overdue', 'verdict']
+
+
 def project_check(query, handover=None):
-    """Projects matching a DLD project number or part of the English (or Arabic) name."""
+    """Projects matching a DLD project number or part of the English (or Arabic) name, as a table."""
     handover = handover or load_handover()
     p = handover.projects
-    text = str(query).strip()
+    text = ' '.join(str(query).split())
+    if len(text) < 2:
+        raise ValueError('Give a project name (at least 2 characters) or a DLD project number.')
     if text.isdigit():
         found = p.loc[p.project_number == int(text)]
     else:
@@ -86,19 +104,39 @@ def project_check(query, handover=None):
                       | p.project_name_ar.fillna('').str.contains(text, regex=False)]
     if found.empty:
         raise ValueError(f'No active project matches "{query}". Finished projects are not checked.')
-    return _rows(found.sort_values(['project_name_en', 'project_number']))
+    return _rows(found.sort_values(['project_name_en', 'project_number'], na_position='last'))
 
 
-def resolve_area(area, handover, names=None):
-    """DLD area name, or the name people use ({DLD area: common name}). Exact match, any case."""
+def project_summary(query, handover=None, limit=20):
+    """project_check as a JSON-safe answer for the API or the agent."""
+    handover = handover or load_handover()
+    rows = project_check(query, handover)
+    return {'query': str(query), 'as_of': handover.as_of, 'matches': len(rows),
+            'projects': _records(rows.head(limit), PROJECT_FIELDS), 'caveats': CAVEATS}
+
+
+def load_aliases(root=ROOT):
+    """{short name people search with: DLD area}, from data/area_search_aliases.csv (exact match only)."""
+    path = Path(root) / 'data/area_search_aliases.csv'
+    if not path.exists():
+        return {}
+    aliases = pd.read_csv(path)
+    return {str(a).strip().casefold(): area for a, area in zip(aliases.alias, aliases.area)}
+
+
+def resolve_area(area, handover, names=None, aliases=None):
+    """DLD area name, the name people use ({DLD area: common name}), or a listed short name (JVC). Exact match."""
     if names is None:
         from src.market_data import load_area_names
         names = load_area_names()
+    aliases = load_aliases() if aliases is None else aliases
     key = ' '.join(str(area).split()).casefold()
     areas = set(handover.projects.area.dropna())
     found = {a for a in areas | set(names) if a.casefold() == key}
     found |= {a for a, common in names.items()
-              if key in {part.strip().casefold() for part in str(common).split(',')}}
+              if key in {part.strip().casefold() for part in re.split(r'[,/]', str(common))}}
+    if not found and key in aliases:
+        found = {aliases[key]}
     if len(found) == 1:
         return found.pop()
     if len(found) > 1:
@@ -108,19 +146,19 @@ def resolve_area(area, handover, names=None):
     raise ValueError(f'No area called "{area}".{hint}')
 
 
-def area_handover(area, handover=None, names=None):
-    """How the homes being built in one area stand, against the whole of Dubai."""
+def area_handover(area, handover=None, names=None, aliases=None):
+    """How the homes being built in one area stand, against the whole of Dubai. JSON-safe."""
     handover = handover or load_handover()
-    name = resolve_area(area, handover, names)
+    name = resolve_area(area, handover, names, aliases)
     p = handover.projects.loc[handover.projects.area == name]
-    by_status = p.groupby('status').homes.sum().astype(int).to_dict()
+    by_status = {k: int(v) for k, v in p.groupby('status').homes.sum().items()}
     worst = _rows(p.loc[p.status == 'overdue'].sort_values('months_overdue', ascending=False).head(5))
-    return {'area': name, 'as_of': handover.as_of, 'active_projects': len(p), 'homes_being_built': int(p.homes.sum()),
-            'homes_by_status': by_status, 'late_homes_share': None if p.empty else _round(late_share(p)),
-            'dubai_late_homes_share': _round(late_share(handover.projects)),
-            'longest_overdue': worst[['project_number', 'project_name_en', 'percent_completed', 'planned_end',
-                                      'months_overdue', 'homes', 'verdict']].to_dict(orient='records'),
-            'caveats': CAVEATS}
+    return {'area': name, 'as_of': handover.as_of, 'active_projects': int(len(p)),
+            'homes_being_built': int(p.homes.sum()), 'homes_by_status': by_status,
+            'late_homes_share': _round(late_share(p)), 'dubai_late_homes_share': _round(late_share(handover.projects)),
+            'longest_overdue': _records(worst, ['project_number', 'project_name_en', 'percent_completed', 'planned_end',
+                                                'months_overdue', 'homes', 'verdict']),
+            'caveats': CAVEATS + ([] if len(p) else [f'DLD lists no active projects in {name}'])}
 
 
 def developer_check(developer, handover=None):
@@ -128,6 +166,10 @@ def developer_check(developer, handover=None):
     handover = handover or load_handover()
     d = handover.developers
     text = str(developer).strip()
+    if text.endswith('.0') and text[:-2].isdigit():      # a number that went through a float
+        text = text[:-2]
+    if len(text) < 2 and not text.isdigit():
+        raise ValueError('Give a DLD developer number (or part of the Arabic name).')
     match = d.loc[d.developer_number == int(text)] if text.isdigit() else \
         d.loc[d.developer_name_ar.fillna('').str.contains(text, regex=False)]
     if match.empty:
@@ -142,13 +184,48 @@ def developer_check(developer, handover=None):
             'active_homes': int(row.active_homes), 'overdue_projects': int(row.overdue_projects),
             'late_homes_share': None if pd.isna(row.late_homes_share) else float(row.late_homes_share),
             'dubai_late_homes_share': _round(late_share(handover.projects)),
-            'projects': projects[['project_number', 'project_name_en', 'area', 'percent_completed', 'planned_end',
-                                  'status', 'verdict']].to_dict(orient='records'),
+            'projects': _records(projects, ['project_number', 'project_name_en', 'area', 'percent_completed',
+                                            'planned_end', 'status', 'verdict']),
             'caveats': CAVEATS + ['developer names are in Arabic in the register; English names need DLD\'s developer list']}
 
 
 def _round(value, digits=3):
-    return None if value != value else round(value, digits)
+    return None if value != value else round(float(value), digits)
+
+
+def get_handover(project=None, area=None, developer=None):
+    """Entry point for the agent's tool call. Exactly one argument; problems come back as {'error': ...}."""
+    given = [k for k, v in (('project', project), ('area', area), ('developer', developer)) if v not in (None, '')]
+    if len(given) != 1:
+        return {'error': 'Give exactly one of project, area or developer.'}
+    try:
+        if project:
+            return project_summary(project)
+        return area_handover(area) if area else developer_check(developer)
+    except ValueError as exc:
+        return {'error': str(exc)}
+
+
+HANDOVER_TOOL = {
+    'type': 'function',
+    'function': {
+        'name': 'get_handover',
+        'description': ('Is an off-plan project being delivered on schedule? Uses the Dubai Land Department project '
+                        'register. Give exactly one of: a project name or DLD project number; an area (DLD name, '
+                        'common name or short name like JVC); or a DLD developer number. Overdue means the planned '
+                        'end date has passed; behind or ahead compares progress with similar projects at the same '
+                        'stage. Quote the verdict sentences and the snapshot date.'),
+        'parameters': {
+            'type': 'object',
+            'properties': {
+                'project': {'type': 'string', 'description': 'Project name (part is enough) or DLD project number'},
+                'area': {'type': 'string', 'description': 'Area, e.g. Dubai Marina, Business Bay or JVC'},
+                'developer': {'type': 'string', 'description': 'DLD developer number'},
+            },
+            'required': [],
+        },
+    },
+}
 
 
 def main():
@@ -158,6 +235,10 @@ def main():
     group.add_argument('--area')
     group.add_argument('--developer')
     args = parser.parse_args()
+    # Developer and some project names are Arabic; a default Windows console cannot print them.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, 'reconfigure'):
+            stream.reconfigure(encoding='utf-8', errors='replace')
     try:
         if args.project:
             rows = project_check(args.project)

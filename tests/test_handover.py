@@ -1,9 +1,14 @@
 """Handover check: schedule status against peers, and the project, area and developer answers."""
+import json
+import os
+import subprocess
+import sys
 import unittest
 
 import numpy as np
 import pandas as pd
 
+from src.advisor import handover as H
 from src.advisor.handover import (ROOT, Handover, area_handover, developer_check, late_share, project_check,
                                   resolve_area, verdict)
 from src.dld_data import projects as P
