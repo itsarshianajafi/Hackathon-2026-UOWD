@@ -94,7 +94,7 @@ def project_check(query, handover=None):
     handover = handover or load_handover()
     p = handover.projects
     text = ' '.join(str(query).split())
-    if len(text) < 2:
+    if len(text) < 2 and not text.isdigit():
         raise ValueError('Give a project name (at least 2 characters) or a DLD project number.')
     if text.isdigit():
         found = p.loc[p.project_number == int(text)]
