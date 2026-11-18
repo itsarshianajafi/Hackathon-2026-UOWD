@@ -107,11 +107,16 @@ export default function Listings() {
                   <strong>{l.area_trend ? <span className={`pill-tag ${TONE[l.area_trend]}`}>{l.area_trend}</span> : '—'}</strong>
                 </div>
               </div>
+              <div className="pr-rent rv" style={{ '--i': 2 }}>
+                {l.gross_yield
+                  ? `If rented out: about ${aed(l.annual_rent_aed)} a year · ${(l.gross_yield * 100).toFixed(1)}% gross yield`
+                  : 'Too few rent contracts here to estimate rent'}
+              </div>
               <button
                 type="button"
                 className="btn sm ghost block rv"
-                style={{ '--i': 2 }}
-                onClick={() => ask(`Tell me about listing ${l.id}, the ${l.title}, and the outlook for ${l.name}. Offer to book a viewing.`)}
+                style={{ '--i': 3 }}
+                onClick={() => ask(`Tell me about listing ${l.id}, the ${l.title}, and the outlook for ${l.name}. Include what I would earn if I rent it out, and offer to book a viewing.`)}
               >
                 <Icon name="sparkle" size={14} /> Ask Estaro about it
               </button>

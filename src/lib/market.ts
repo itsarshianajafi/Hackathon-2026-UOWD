@@ -87,6 +87,32 @@ export function freeSlots(listingId: string, from = new Date()) {
   return slots;
 }
 
+export const rentWindow = listingsFile.rent_window;
+
+/** If you buy this home and rent it out: DLD Ejari new-contract rent per m2 for the segment times the size. */
+export function rentalRoi(listingId: string, runningCostsShare = 0.25, price?: number) {
+  const l = listings.find((x) => x.id === listingId);
+  if (!l) return { ok: false as const, error: `No listing ${listingId}` };
+  if (l.annual_rent_aed == null || l.rent_per_m2_aed == null) {
+    return { ok: false as const, error: `Too few rent contracts in ${l.name} (${l.kind}) to estimate rent; at least 30 are needed.` };
+  }
+  const paid = price ?? l.price_aed;
+  const rent = l.rent_per_m2_aed * l.size_m2;
+  const net = rent * (1 - runningCostsShare);
+  const caveats = [
+    "Rent is the area's median new Ejari contract per m2, times this home's size.",
+    `Running costs (service charges, vacancy, fees) are assumed at ${Math.round(runningCostsShare * 100)}% of rent; DLD has no figures for them.`,
+  ];
+  if (l.registration === "Off-Plan") caveats.push("Off-plan: rent starts only after handover; today's rents for finished homes are used.");
+  return {
+    ok: true as const, listingId: l.id, title: l.title, price_aed: paid, size_m2: l.size_m2,
+    annual_rent_aed: Math.round(rent), monthly_rent_aed: Math.round(rent / 12),
+    gross_yield: rent / paid, running_costs_share: runningCostsShare,
+    net_annual_rent_aed: Math.round(net), net_yield: net / paid, years_to_repay: paid / net,
+    rent_contracts: l.rent_contracts, rent_window: rentWindow, caveats,
+  };
+}
+
 export function bookViewing(listingId: string, slot: string, buyer: string) {
   const listing = listings.find((l) => l.id === listingId);
   if (!listing) return { ok: false as const, error: `No listing ${listingId}` };

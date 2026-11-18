@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
-import "../dashboard/styles/base.css";
-import "../dashboard/styles/shell.css";
-import "../dashboard/styles/dashboard.css";
-import "../dashboard/styles/sage.css";
-import "../dashboard/styles/pages.css";
-import "../dashboard/styles/mode.css";
+import "@/dashboard/styles/base.css";
+import "@/dashboard/styles/shell.css";
+import "@/dashboard/styles/dashboard.css";
+import "@/dashboard/styles/sage.css";
+import "@/dashboard/styles/pages.css";
+import "@/dashboard/styles/mode.css";
 
 export const metadata: Metadata = {
   title: "Estaro AI — Dubai property market",
   description: "Dubai property intelligence dashboard",
-  icons: { icon: "/favicon.svg" },
 };
 
 // Applies the saved theme before first paint, as the original index.html did.
@@ -19,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#ebeae5" />
+        <meta name="theme-color" content="#f2f4f6" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

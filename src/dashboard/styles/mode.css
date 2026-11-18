@@ -384,18 +384,48 @@
   width: 76px;
   height: 76px;
 }
+/* pinned, the logo becomes the top of the rail: one white column */
 .hdr-logo.pinned {
   position: fixed;
   top: 24px;
-  width: 76px;
-  height: 76px;
+  height: 84px;
   z-index: 40;
   background: var(--card);
-  box-shadow: var(--shadow-soft);
-  animation: popIn 0.35s var(--ease) both;
+  border-radius: 40px 40px 0 0;
 }
 .logo-pinned .rail {
-  top: 114px;
-  height: calc(100vh - 138px);
-  transition: top 0.35s var(--ease), height 0.35s var(--ease);
+  top: 108px;
+  height: calc(100vh - 132px);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.ac-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.ac-roi {
+  border-color: var(--sage-soft);
+}
+.pr-rent {
+  font-size: 12.5px;
+  color: var(--sage-ink);
+  margin: 2px 0 8px;
+}
+
+.logo-mark {
+  display: grid;
+  place-items: center;
+}
+.logo-mark img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.logo-white,
+[data-theme='dark'] .logo-ink {
+  display: none;
+}
+[data-theme='dark'] .logo-white {
+  display: block;
 }

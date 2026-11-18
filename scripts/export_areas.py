@@ -18,6 +18,7 @@ parser.add_argument('--repo', type=Path, required=True)
 args = parser.parse_args()
 sys.path.insert(0, str(args.repo.resolve()))
 from src.market_data import load_bundle  # noqa: E402
+from src.advisor.shortlist import MIN_RENT_CONTRACTS, _prepare, load_market  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[1] / 'src/data'
 b = load_bundle()
@@ -40,6 +41,15 @@ for key, s in sales[sales.status.eq('ok')].iterrows():
         'price_m2_forecast': None if p is None or p.status != 'ok' else num(p.forecast_value),
         'trend': None if tr is None or tr.status != 'ok' else tr.trend_label,
     })
+seg = _prepare(load_market())
+rents = {(r.area, r.registration_type, r.property_kind): r for r in seg.itertuples()
+         if r.rent_contracts >= MIN_RENT_CONTRACTS and pd.notna(r.rent_per_m2_median_aed)}
+supply = seg.groupby('area').pipeline_homes_next_12m.max()
+for a in areas:
+    flat = rents.get((a['area'], a['registration'], 'Apartment'))
+    a['gross_yield_apartment'] = None if flat is None else float(flat.rent_per_m2_median_aed / flat.price_per_m2_median_aed)
+    a['pipeline_homes_next_12m'] = None if pd.isna(supply.get(a['area'])) else int(supply.get(a['area']))
+    a['price_change'] = (a['price_m2_forecast'] / a['price_m2_last'] - 1) if a['price_m2_forecast'] and a['price_m2_last'] else None
 areas.sort(key=lambda a: -a['forecast_sales'])
 
 rng = random.Random(2026)
@@ -58,8 +68,14 @@ for a in areas:
             'registration': a['registration'], 'beds': beds, 'size_m2': size,
             'price_aed': round(size * per_m2, -3), 'price_m2_aed': round(per_m2),
             'area_trend': a['trend'],
+            'kind': 'Villa' if beds == 4 else 'Apartment',
         })
-meta = {'quarter': latest, 'forecast_quarter': b['forecast_manifest']['forecast_quarter'], 'data_to': b['quality']['date_max']}
+        rent = rents.get((a['area'], a['registration'], listings[-1]['kind']))
+        listings[-1]['rent_per_m2_aed'] = None if rent is None else round(float(rent.rent_per_m2_median_aed), 1)
+        listings[-1]['rent_contracts'] = None if rent is None else int(rent.rent_contracts)
+        listings[-1]['annual_rent_aed'] = None if rent is None else round(float(rent.rent_per_m2_median_aed) * size, -2)
+        listings[-1]['gross_yield'] = None if rent is None else round(listings[-1]['annual_rent_aed'] / listings[-1]['price_aed'], 4)
+meta = {'rent_window': [str(seg.window_start.iloc[0]), str(seg.window_end.iloc[0])], 'quarter': latest, 'forecast_quarter': b['forecast_manifest']['forecast_quarter'], 'data_to': b['quality']['date_max']}
 (OUT / 'areas.json').write_text(json.dumps({**meta, 'rows': areas}, indent=1, ensure_ascii=False, allow_nan=False) + '\n', encoding='utf-8')
 (OUT / 'listings.json').write_text(json.dumps({**meta, 'rows': listings}, indent=1, ensure_ascii=False, allow_nan=False) + '\n', encoding='utf-8')
 print(len(areas), 'area segments,', len(listings), 'listings')

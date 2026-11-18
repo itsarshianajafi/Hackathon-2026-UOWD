@@ -8,6 +8,39 @@ const TONE = { Rising: 'up', Stable: 'sage', Declining: 'down' }
 const when = (slot) =>
   new Date(slot).toLocaleString('en-GB', { timeZone: 'Asia/Dubai', weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 const MAX = 4
+const pct = (x) => `${(x * 100).toFixed(1)}%`
+
+function RoiCard({ r }) {
+  return (
+    <div className="ac-card ac-roi">
+      <div className="ac-top">
+        <strong>If you buy and rent it out</strong>
+        <span className="pill-tag sage">{pct(r.net_yield)} net</span>
+      </div>
+      <div className="ac-facts">
+        {r.title} · {aed(r.price_aed)}
+      </div>
+      <div className="ac-grid ac-grid-3">
+        <span>
+          <small>Rent per year</small>
+          <b>{aed(r.annual_rent_aed)}</b>
+        </span>
+        <span>
+          <small>Gross yield</small>
+          <b>{pct(r.gross_yield)}</b>
+        </span>
+        <span>
+          <small>Pays back in</small>
+          <b>{r.years_to_repay.toFixed(1)} yrs</b>
+        </span>
+      </div>
+      <div className="ac-facts">
+        {aed(r.monthly_rent_aed)} a month · net {aed(r.net_annual_rent_aed)} a year after {Math.round(r.running_costs_share * 100)}% running costs ·{' '}
+        {r.rent_contracts} Ejari contracts, {r.rent_window.join(' to ')}
+      </div>
+    </div>
+  )
+}
 
 function ListingCard({ l, onAsk, i }) {
   return (
@@ -20,6 +53,7 @@ function ListingCard({ l, onAsk, i }) {
       <div className="ac-facts">
         {BEDS[l.beds]} · {l.size_m2} m² · {l.registration} · {l.id}
       </div>
+      {l.gross_yield ? <div className="ac-why">Rent est. {aed(l.annual_rent_aed)} a year · {pct(l.gross_yield)} gross yield</div> : null}
       {l.reasons?.length ? <div className="ac-why">{l.reasons.join(' · ')}</div> : null}
       <button type="button" className="btn sm ghost" onClick={() => onAsk(`Book a viewing for listing ${l.id} on the first free slot`)}>
         <Icon name="calendar" size={13} /> Book a viewing
@@ -59,17 +93,21 @@ function More({ n }) {
 /** Cards built from the agent's tool results, so every figure shown is the tool's own output. */
 export default function AgentCards({ steps, onAsk }) {
   const last = (tool) => [...steps].reverse().find((s) => s.tool === tool)?.output
+  const rois = steps.filter((s) => s.tool === 'rental_roi' && s.output?.ok).map((s) => s.output)
   const booked = steps.filter((s) => s.tool === 'book_viewing' && s.output?.ok).map((s) => s.output.viewing)
   const matched = last('match_buyer')?.matches
   const found = last('search_listings')?.listings
-  const listings = booked.length ? [] : (matched ?? found ?? [])
+  const listings = booked.length || rois.length ? [] : (matched ?? found ?? [])
   const areas = last('top_areas')?.areas ?? last('get_area_outlook')?.segments ?? []
   const slots = booked.length ? [] : (last('get_available_slots')?.slots ?? [])
   const viewings = last('list_viewings')?.viewings ?? []
 
-  if (!booked.length && !listings.length && !areas.length && !slots.length && !viewings.length) return null
+  if (!rois.length && !booked.length && !listings.length && !areas.length && !slots.length && !viewings.length) return null
   return (
     <div className="agent-cards">
+      {rois.map((r) => (
+        <RoiCard key={r.listingId + r.price_aed} r={r} />
+      ))}
       {booked.map((v) => (
         <div key={v.id} className="ac-card ac-booked">
           <span className="ac-ic">

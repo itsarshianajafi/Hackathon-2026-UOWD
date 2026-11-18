@@ -1,31 +1,13 @@
 import { useId, useRef } from 'react'
 import { useOrbLife } from '../lib/orbLife'
 
-/** The sage sunburst mark from the reference. */
+/** The Estaro mark: a script E under a roof line. */
 export function Logo({ size = 58 }) {
-  const rays = 12
   return (
-    <svg width={size} height={size} viewBox="0 0 60 60" aria-hidden="true" className="logo-mark">
-      <g stroke="var(--logo, #4f6d59)" strokeWidth="4.6" strokeLinecap="round">
-        {Array.from({ length: rays }, (_, i) => {
-          const a = (i / rays) * Math.PI * 2
-          const r1 = i % 2 ? 11 : 9
-          const r2 = i % 2 ? 25 : 27
-          return (
-            <line
-              key={i}
-              className="logo-ray"
-              style={{ '--r': i }}
-              x1={30 + Math.cos(a) * r1}
-              y1={30 + Math.sin(a) * r1}
-              x2={30 + Math.cos(a) * r2}
-              y2={30 + Math.sin(a) * r2}
-              pathLength="1"
-            />
-          )
-        })}
-      </g>
-    </svg>
+    <span className="logo-mark" style={{ width: size, height: size }} aria-hidden="true">
+      <img src="/brand/estaro-mark.png" alt="" className="logo-ink" />
+      <img src="/brand/estaro-mark-white.png" alt="" className="logo-white" />
+    </span>
   )
 }
 

@@ -7,7 +7,7 @@
   --gx: -0.5;
   --gy: -0.1;
   --fx: 0.9;
-  --orb-glow: 88, 96, 246;
+  --orb-glow: 198, 162, 107;
   position: relative;
   display: inline-block;
   flex-shrink: 0;
@@ -29,8 +29,8 @@
   overflow: hidden;
   isolation: isolate;
   background:
-    radial-gradient(75% 50% at 50% 100%, rgba(132, 228, 252, 0.95), rgba(132, 228, 252, 0) 72%),
-    radial-gradient(60% 60% at 47% 44%, #4334e6 0%, #4a43ee 42%, #646cf2 64%, #a2a8f8 82%, #e0defd 100%);
+    radial-gradient(75% 50% at 50% 100%, rgba(255, 240, 214, 0.95), rgba(255, 240, 214, 0) 72%),
+    radial-gradient(60% 60% at 47% 44%, #7a5c30 0%, #9c7a47 42%, #c6a26b 64%, #dcc294 82%, #f5ecdc 100%);
   box-shadow:
     0 calc(var(--s) * 0.16) calc(var(--s) * 0.36) calc(var(--s) * -0.1) rgba(var(--orb-glow), 0.62),
     0 calc(var(--s) * 0.03) calc(var(--s) * 0.08) rgba(var(--orb-glow), 0.2);
@@ -45,8 +45,8 @@
   inset: -25%;
   border-radius: 50%;
   background:
-    radial-gradient(28% 24% at 36% 40%, rgba(122, 84, 255, 0.9), rgba(122, 84, 255, 0)),
-    radial-gradient(26% 22% at 66% 64%, rgba(90, 178, 255, 0.6), rgba(90, 178, 255, 0));
+    radial-gradient(28% 24% at 36% 40%, rgba(138, 107, 60, 0.9), rgba(138, 107, 60, 0)),
+    radial-gradient(26% 22% at 66% 64%, rgba(242, 244, 246, 0.6), rgba(242, 244, 246, 0));
   filter: blur(calc(var(--s) * 0.07));
   animation: spin 9s linear infinite;
 }
@@ -57,7 +57,7 @@
   box-shadow:
     inset 0 0 calc(var(--s) * 0.07) calc(var(--s) * 0.015) rgba(255, 255, 255, 0.6),
     inset 0 calc(var(--s) * 0.06) calc(var(--s) * 0.1) rgba(255, 255, 255, 0.35),
-    inset 0 calc(var(--s) * -0.05) calc(var(--s) * 0.12) rgba(150, 236, 255, 0.45);
+    inset 0 calc(var(--s) * -0.05) calc(var(--s) * 0.12) rgba(255, 236, 200, 0.45);
 }
 .orb-shine {
   left: 17%;
@@ -362,7 +362,7 @@
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  border: 2px solid rgba(108, 112, 246, 0.5);
+  border: 2px solid rgba(198, 162, 107, 0.55);
   opacity: 0;
 }
 .sage-arrival.hello .sage-arrival-body::before {
@@ -401,7 +401,7 @@
 }
 .sage-arrival-says b {
   font-weight: 700;
-  background: linear-gradient(90deg, #4537e8, #6d77f4);
+  background: linear-gradient(90deg, #a8844f, #c6a26b);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -561,7 +561,7 @@
   position: absolute;
   inset: -14px;
   border-radius: 50%;
-  border: 1.5px solid rgba(108, 112, 246, 0.32);
+  border: 1.5px solid rgba(198, 162, 107, 0.35);
   animation: ripple 3s ease-out infinite;
 }
 .hello-orb::after {

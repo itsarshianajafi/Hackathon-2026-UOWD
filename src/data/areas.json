@@ -1,4 +1,8 @@
 {
+ "rent_window": [
+  "2025-10",
+  "2026-09"
+ ],
  "quarter": "2026Q3",
  "forecast_quarter": "2026Q4",
  "data_to": "2026-10-27",
@@ -12,7 +16,10 @@
    "sales_change": -0.2790012135656246,
    "price_m2_last": 18459.091000712942,
    "price_m2_forecast": 18882.365997913854,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.049803986894938305,
+   "pipeline_homes_next_12m": 6646,
+   "price_change": 0.02293043558778507
   },
   {
    "area": "Al Barsha South Fourth",
@@ -23,7 +30,10 @@
    "sales_change": 0.07986949906780749,
    "price_m2_last": 16984.43987878485,
    "price_m2_forecast": 18218.695229525147,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.05894844105433219,
+   "pipeline_homes_next_12m": 7483,
+   "price_change": 0.07266977065767088
   },
   {
    "area": "Wadi Al Safa 3",
@@ -34,7 +44,10 @@
    "sales_change": 0.0046446728786748714,
    "price_m2_last": 16185.303699944248,
    "price_m2_forecast": 17609.669919383537,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.04930360008890559,
+   "pipeline_homes_next_12m": 3060,
+   "price_change": 0.0880036757941216
   },
   {
    "area": "Wadi Al Safa 5",
@@ -45,7 +58,10 @@
    "sales_change": 0.05070268585642057,
    "price_m2_last": 15447.955282619583,
    "price_m2_forecast": 16562.694716034104,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.047131753444181676,
+   "pipeline_homes_next_12m": 4265,
+   "price_change": 0.07216096972190944
   },
   {
    "area": "Al Barsha South Fourth",
@@ -56,7 +72,10 @@
    "sales_change": -0.11460628929526484,
    "price_m2_last": 13376.38963566528,
    "price_m2_forecast": 14282.713195599055,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07034232519534228,
+   "pipeline_homes_next_12m": 7483,
+   "price_change": 0.0677554694965865
   },
   {
    "area": "Jabal Ali Industrial Second",
@@ -67,7 +86,10 @@
    "sales_change": -0.5702307994545994,
    "price_m2_last": 18841.034686790943,
    "price_m2_forecast": null,
-   "trend": "Rising"
+   "trend": "Rising",
+   "gross_yield_apartment": 0.057685329622870304,
+   "pipeline_homes_next_12m": 420,
+   "price_change": null
   },
   {
    "area": "Jabal Ali First",
@@ -78,7 +100,10 @@
    "sales_change": 0.059142312023662935,
    "price_m2_last": 21511.002658428435,
    "price_m2_forecast": 21617.03712941382,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.05209377243695058,
+   "pipeline_homes_next_12m": 2630,
+   "price_change": 0.004929313276052172
   },
   {
    "area": "Business Bay",
@@ -89,7 +114,10 @@
    "sales_change": -0.0690806734382341,
    "price_m2_last": 19678.635947114508,
    "price_m2_forecast": 21404.076553632945,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.06866645555835785,
+   "pipeline_homes_next_12m": 10331,
+   "price_change": 0.08768090487346214
   },
   {
    "area": "Al Hebiah First",
@@ -100,7 +128,10 @@
    "sales_change": 0.00956066291458213,
    "price_m2_last": 20654.34291089497,
    "price_m2_forecast": null,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.040306451339470147,
+   "pipeline_homes_next_12m": 257,
+   "price_change": null
   },
   {
    "area": "Marsa Dubai",
@@ -111,7 +142,10 @@
    "sales_change": -0.13833121643638657,
    "price_m2_last": 21992.49730909587,
    "price_m2_forecast": 24002.27637946035,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.055864730864674,
+   "pipeline_homes_next_12m": 2890,
+   "price_change": 0.09138475918027078
   },
   {
    "area": "Business Bay",
@@ -122,7 +156,10 @@
    "sales_change": 0.2945017776157075,
    "price_m2_last": 30916.10701914751,
    "price_m2_forecast": 33017.31861235174,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.04710522611371657,
+   "pipeline_homes_next_12m": 10331,
+   "price_change": 0.06796494758873983
   },
   {
    "area": "Al Khairan First",
@@ -133,7 +170,10 @@
    "sales_change": 0.011850139916371294,
    "price_m2_last": 28019.724814843907,
    "price_m2_forecast": 30921.84930317414,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.04680466850543798,
+   "pipeline_homes_next_12m": 453,
+   "price_change": 0.10357433941652361
   },
   {
    "area": "Al Thanyah Fifth",
@@ -144,7 +184,10 @@
    "sales_change": -0.022513610295045283,
    "price_m2_last": 25233.49295503844,
    "price_m2_forecast": 26884.48948461646,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.042137227485058604,
+   "pipeline_homes_next_12m": 2230,
+   "price_change": 0.06542877486362264
   },
   {
    "area": "Al Barshaa South Third",
@@ -155,7 +198,10 @@
    "sales_change": 0.06159590466048703,
    "price_m2_last": 18673.3369269116,
    "price_m2_forecast": 19541.145286262752,
-   "trend": "Rising"
+   "trend": "Rising",
+   "gross_yield_apartment": 0.05867653856916406,
+   "pipeline_homes_next_12m": 2350,
+   "price_change": 0.04647312704460904
   },
   {
    "area": "Jabal Ali First",
@@ -166,7 +212,10 @@
    "sales_change": -0.013900507857836586,
    "price_m2_last": 11856.39159843541,
    "price_m2_forecast": 12980.743966236552,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.08098260568538788,
+   "pipeline_homes_next_12m": 2630,
+   "price_change": 0.09483090689662399
   },
   {
    "area": "Me'Aisem First",
@@ -177,7 +226,10 @@
    "sales_change": 0.01143494634691411,
    "price_m2_last": 16189.228042323157,
    "price_m2_forecast": 16536.722040513352,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.06444399891092699,
+   "pipeline_homes_next_12m": 1346,
+   "price_change": 0.021464519326168663
   },
   {
    "area": "Al Merkadh",
@@ -188,7 +240,10 @@
    "sales_change": -0.1104308304512086,
    "price_m2_last": 21240.83473597636,
    "price_m2_forecast": 22543.660897739803,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.06689213369791573,
+   "pipeline_homes_next_12m": 1902,
+   "price_change": 0.06133592101993979
   },
   {
    "area": "Dubai Investment Park First",
@@ -199,7 +254,10 @@
    "sales_change": -0.3847486067394327,
    "price_m2_last": 11210.25487974615,
    "price_m2_forecast": 12042.03393494234,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07840367747995891,
+   "pipeline_homes_next_12m": 231,
+   "price_change": 0.07419805027796333
   },
   {
    "area": "Al Yufrah 1",
@@ -210,7 +268,10 @@
    "sales_change": -0.19868929041064165,
    "price_m2_last": 21492.85659623138,
    "price_m2_forecast": 20235.232796079705,
-   "trend": "Rising"
+   "trend": "Rising",
+   "gross_yield_apartment": null,
+   "pipeline_homes_next_12m": 486,
+   "price_change": -0.058513571452023294
   },
   {
    "area": "Al Barsha South Fifth",
@@ -221,7 +282,10 @@
    "sales_change": 0.20899580997294165,
    "price_m2_last": 17918.477277988866,
    "price_m2_forecast": 18962.466003634163,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.05818810766767814,
+   "pipeline_homes_next_12m": 3583,
+   "price_change": 0.05826325024435741
   },
   {
    "area": "Al Thanyah Fifth",
@@ -232,7 +296,10 @@
    "sales_change": -0.027047155478734486,
    "price_m2_last": 17340.79364578148,
    "price_m2_forecast": 18076.45897596184,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07057317518114146,
+   "pipeline_homes_next_12m": 2230,
+   "price_change": 0.04242397119807295
   },
   {
    "area": "Burj Khalifa",
@@ -243,7 +310,10 @@
    "sales_change": -0.11783551004987713,
    "price_m2_last": 26496.15830404862,
    "price_m2_forecast": 28938.63684103636,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.052821277832776674,
+   "pipeline_homes_next_12m": 2131,
+   "price_change": 0.0921823650417477
   },
   {
    "area": "Al Jadaf",
@@ -254,7 +324,10 @@
    "sales_change": 0.006662246612416878,
    "price_m2_last": 21649.018210666534,
    "price_m2_forecast": 23401.675209849,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.04490635271697228,
+   "pipeline_homes_next_12m": 683,
+   "price_change": 0.0809578052051767
   },
   {
    "area": "Madinat Dubai Almelaheyah",
@@ -265,7 +338,10 @@
    "sales_change": 0.20796057937602752,
    "price_m2_last": 33090.940668611765,
    "price_m2_forecast": 35264.39415015995,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.02854772961234754,
+   "pipeline_homes_next_12m": 1931,
+   "price_change": 0.06568122385259967
   },
   {
    "area": "Nad Al Shiba First",
@@ -276,7 +352,10 @@
    "sales_change": -0.04103851497161415,
    "price_m2_last": 36319.20078622844,
    "price_m2_forecast": 35132.7757973785,
-   "trend": "Rising"
+   "trend": "Rising",
+   "gross_yield_apartment": 0.027379690451875067,
+   "pipeline_homes_next_12m": 754,
+   "price_change": -0.0326666050784854
   },
   {
    "area": "Al Hebiah Fourth",
@@ -287,7 +366,10 @@
    "sales_change": 0.11563415431464885,
    "price_m2_last": 17018.19466063139,
    "price_m2_forecast": 17999.381781194134,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.05604551554060431,
+   "pipeline_homes_next_12m": 1336,
+   "price_change": 0.05765518259304825
   },
   {
    "area": "Wadi Al Safa 5",
@@ -298,7 +380,10 @@
    "sales_change": -0.016329669448036266,
    "price_m2_last": 12054.68102905238,
    "price_m2_forecast": 12493.113803887083,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.08668800633051302,
+   "pipeline_homes_next_12m": 4265,
+   "price_change": 0.036370333962222334
   },
   {
    "area": "Hadaeq Sheikh Mohammed Bin Rashid",
@@ -309,7 +394,10 @@
    "sales_change": -0.09710245681797636,
    "price_m2_last": 23111.186709655347,
    "price_m2_forecast": 24589.002415591312,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.05800171051104416,
+   "pipeline_homes_next_12m": 1441,
+   "price_change": 0.063943739648755
   },
   {
    "area": "Al Hebiah Second",
@@ -320,7 +408,10 @@
    "sales_change": -0.014117111078849831,
    "price_m2_last": 20282.16213444319,
    "price_m2_forecast": 20713.66573407773,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07015045206089494,
+   "pipeline_homes_next_12m": 978,
+   "price_change": 0.021275029593701866
   },
   {
    "area": "Al Barshaa South Third",
@@ -331,7 +422,10 @@
    "sales_change": -0.01306595650484077,
    "price_m2_last": 14489.81542143795,
    "price_m2_forecast": 15072.480600718569,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07198789733276384,
+   "pipeline_homes_next_12m": 2350,
+   "price_change": 0.04021204979730486
   },
   {
    "area": "Al Warsan First",
@@ -342,7 +436,10 @@
    "sales_change": -0.14927555155733696,
    "price_m2_last": 7562.47908367161,
    "price_m2_forecast": 7968.899717476144,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.09430654862315975,
+   "pipeline_homes_next_12m": 105,
+   "price_change": 0.05374172005077682
   },
   {
    "area": "Al Hebiah Fourth",
@@ -353,7 +450,10 @@
    "sales_change": -0.07892078614053089,
    "price_m2_last": 11852.329484531996,
    "price_m2_forecast": 12622.64219448999,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.08716763660071712,
+   "pipeline_homes_next_12m": 1336,
+   "price_change": 0.06499251568759523
   },
   {
    "area": "Al Hebiah Third",
@@ -364,7 +464,10 @@
    "sales_change": -0.15991046768571981,
    "price_m2_last": 19576.10716817585,
    "price_m2_forecast": 20743.864197189232,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.05760510741304057,
+   "pipeline_homes_next_12m": 479,
+   "price_change": 0.05965215755008524
   },
   {
    "area": "Nadd Hessa",
@@ -375,7 +478,10 @@
    "sales_change": -0.06792319443703232,
    "price_m2_last": 10568.955578283818,
    "price_m2_forecast": 11238.12876164794,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.08017374249898129,
+   "pipeline_homes_next_12m": 81,
+   "price_change": 0.06331497737951342
   },
   {
    "area": "Al Khairan First",
@@ -386,7 +492,10 @@
    "sales_change": 0.06851265940353546,
    "price_m2_last": 24531.12640982506,
    "price_m2_forecast": 25787.225698520466,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.05240298654807735,
+   "pipeline_homes_next_12m": 453,
+   "price_change": 0.051204305408182105
   },
   {
    "area": "Me'Aisem First",
@@ -397,7 +506,10 @@
    "sales_change": -0.04629798159632503,
    "price_m2_last": 11504.263062816508,
    "price_m2_forecast": 12462.4514732403,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.08812764216004419,
+   "pipeline_homes_next_12m": 1346,
+   "price_change": 0.08328985569886704
   },
   {
    "area": "Madinat Al Mataar",
@@ -408,7 +520,10 @@
    "sales_change": 0.2208433466239097,
    "price_m2_last": 12303.503454237807,
    "price_m2_forecast": 12731.17378740333,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07797007166555785,
+   "pipeline_homes_next_12m": 6646,
+   "price_change": 0.034760044954367464
   },
   {
    "area": "Wadi Al Safa 3",
@@ -419,7 +534,10 @@
    "sales_change": 0.04882205201827383,
    "price_m2_last": 13550.917941036994,
    "price_m2_forecast": 14131.541714131028,
-   "trend": "Rising"
+   "trend": "Rising",
+   "gross_yield_apartment": 0.07432553542979657,
+   "pipeline_homes_next_12m": 3060,
+   "price_change": 0.0428475602627405
   },
   {
    "area": "Al Merkadh",
@@ -430,7 +548,10 @@
    "sales_change": 0.01484326716174822,
    "price_m2_last": 25047.758385271653,
    "price_m2_forecast": 26762.680129883774,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.06462497492550973,
+   "pipeline_homes_next_12m": 1902,
+   "price_change": 0.06846607661388626
   },
   {
    "area": "Hadaeq Sheikh Mohammed Bin Rashid",
@@ -441,7 +562,10 @@
    "sales_change": 0.19685380582223,
    "price_m2_last": 26294.056216919857,
    "price_m2_forecast": 28703.561104413413,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.05482759177207436,
+   "pipeline_homes_next_12m": 1441,
+   "price_change": 0.09163686529060788
   },
   {
    "area": "Al Yelayiss 2",
@@ -452,7 +576,10 @@
    "sales_change": -0.06270952008959163,
    "price_m2_last": 14180.210800525758,
    "price_m2_forecast": 15022.821702087927,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07297346192255653,
+   "pipeline_homes_next_12m": 979,
+   "price_change": 0.05942160616758452
   },
   {
    "area": "Wadi Al Safa 2",
@@ -463,7 +590,10 @@
    "sales_change": 0.24975545845945435,
    "price_m2_last": 15846.629709811992,
    "price_m2_forecast": 16154.776247885646,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.04923939294229623,
+   "pipeline_homes_next_12m": 961,
+   "price_change": 0.019445556797661245
   },
   {
    "area": "Al Warsan First",
@@ -474,7 +604,10 @@
    "sales_change": -0.07392405746661801,
    "price_m2_last": 13814.883178470396,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": 0.0507374819850228,
+   "pipeline_homes_next_12m": 105,
+   "price_change": null
   },
   {
    "area": "Al Yelayiss 2",
@@ -485,7 +618,10 @@
    "sales_change": 0.1373700066124952,
    "price_m2_last": 16649.75630603382,
    "price_m2_forecast": 18142.94754750134,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.05715848769041712,
+   "pipeline_homes_next_12m": 979,
+   "price_change": 0.08968246826089521
   },
   {
    "area": "Palm Jumeirah",
@@ -496,7 +632,10 @@
    "sales_change": -0.05124283176336253,
    "price_m2_last": 27471.57311223529,
    "price_m2_forecast": 31262.03083964005,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.047068248475486484,
+   "pipeline_homes_next_12m": 1236,
+   "price_change": 0.13797745443694898
   },
   {
    "area": "Nadd Hessa",
@@ -507,7 +646,10 @@
    "sales_change": 0.3589304020331141,
    "price_m2_last": 18060.04012288929,
    "price_m2_forecast": 17899.977739834267,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.04164019146156446,
+   "pipeline_homes_next_12m": 81,
+   "price_change": -0.008862792217840143
   },
   {
    "area": "Al Wasl",
@@ -518,7 +660,10 @@
    "sales_change": 0.1661555386811593,
    "price_m2_last": 34705.859104506286,
    "price_m2_forecast": 36978.30752233291,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.045906046733136904,
+   "pipeline_homes_next_12m": 667,
+   "price_change": 0.06547737115464636
   },
   {
    "area": "Burj Khalifa",
@@ -529,7 +674,10 @@
    "sales_change": 0.3581463890392014,
    "price_m2_last": 39827.14603305283,
    "price_m2_forecast": 41944.49288364436,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.034166930293746955,
+   "pipeline_homes_next_12m": 2131,
+   "price_change": 0.05316340891798599
   },
   {
    "area": "Marsa Dubai",
@@ -540,7 +688,10 @@
    "sales_change": 0.3261428113695515,
    "price_m2_last": 41021.05978389487,
    "price_m2_forecast": 43407.06587952412,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.026144858260084346,
+   "pipeline_homes_next_12m": 2890,
+   "price_change": 0.0581653937806359
   },
   {
    "area": "Al Barsha South Fifth",
@@ -551,7 +702,10 @@
    "sales_change": 0.05275580063377516,
    "price_m2_last": 15914.955394837643,
    "price_m2_forecast": 16038.439798354006,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07315526525294393,
+   "pipeline_homes_next_12m": 3583,
+   "price_change": 0.00775901662636258
   },
   {
    "area": "Al Hebiah First",
@@ -562,7 +716,10 @@
    "sales_change": 0.20882259053578411,
    "price_m2_last": 12200.121412627272,
    "price_m2_forecast": 12276.664792829446,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07557566008127573,
+   "pipeline_homes_next_12m": 257,
+   "price_change": 0.006273985119767067
   },
   {
    "area": "Al Hebiah Third",
@@ -573,7 +730,10 @@
    "sales_change": -0.0026202439403603117,
    "price_m2_last": 13904.590087807514,
    "price_m2_forecast": 15090.268216800689,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07591907251050639,
+   "pipeline_homes_next_12m": 479,
+   "price_change": 0.0852724259762867
   },
   {
    "area": "Al Jadaf",
@@ -584,7 +744,10 @@
    "sales_change": 0.016168023553478017,
    "price_m2_last": 18377.71944507018,
    "price_m2_forecast": 19176.495675301885,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.051871292925045324,
+   "pipeline_homes_next_12m": 683,
+   "price_change": 0.04346438265200403
   },
   {
    "area": "Al Thanyah Third",
@@ -595,7 +758,10 @@
    "sales_change": -0.04299622792139679,
    "price_m2_last": 19259.63600344113,
    "price_m2_forecast": 20831.59788042798,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.06280289477734559,
+   "pipeline_homes_next_12m": 0,
+   "price_change": 0.0816195008413445
   },
   {
    "area": "Wadi Al Safa 2",
@@ -606,7 +772,10 @@
    "sales_change": 0.08273536823530603,
    "price_m2_last": 9640.039435475734,
    "price_m2_forecast": 10450.793301206251,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.08429909111839022,
+   "pipeline_homes_next_12m": 961,
+   "price_change": 0.08410275405585077
   },
   {
    "area": "Al Thanayah Fourth",
@@ -617,7 +786,10 @@
    "sales_change": -0.035953915358825195,
    "price_m2_last": 17851.416766724822,
    "price_m2_forecast": 19061.211171938783,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": null,
+   "pipeline_homes_next_12m": 0,
+   "price_change": 0.06777021796214111
   },
   {
    "area": "Al Hebiah Second",
@@ -628,7 +800,10 @@
    "sales_change": 0.14753336994834942,
    "price_m2_last": 14425.627447874494,
    "price_m2_forecast": null,
-   "trend": "Rising"
+   "trend": "Rising",
+   "gross_yield_apartment": 0.07757939224997211,
+   "pipeline_homes_next_12m": 978,
+   "price_change": null
   },
   {
    "area": "Wadi Al Safa 7",
@@ -639,7 +814,10 @@
    "sales_change": 0.02593991362433523,
    "price_m2_last": 14174.952460826691,
    "price_m2_forecast": 14531.992259880111,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.08771434687942443,
+   "pipeline_homes_next_12m": 0,
+   "price_change": 0.02518807735264872
   },
   {
    "area": "Al Hebiah Sixth",
@@ -650,7 +828,10 @@
    "sales_change": -0.2729974586579217,
    "price_m2_last": 17777.235154600727,
    "price_m2_forecast": 18337.75862749956,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": null,
+   "pipeline_homes_next_12m": 0,
+   "price_change": 0.03153040773912297
   },
   {
    "area": "Warsan Fourth",
@@ -661,7 +842,10 @@
    "sales_change": 0.07604145204166168,
    "price_m2_last": 11482.140948988765,
    "price_m2_forecast": 11676.156694919711,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.08432229726098545,
+   "pipeline_homes_next_12m": 862,
+   "price_change": 0.016897175081972193
   },
   {
    "area": "Al Wasl",
@@ -672,7 +856,10 @@
    "sales_change": -0.00724977606363153,
    "price_m2_last": 28228.93456718051,
    "price_m2_forecast": 29224.65868608665,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.054969732468794844,
+   "pipeline_homes_next_12m": 667,
+   "price_change": 0.03527317393210394
   },
   {
    "area": "Zaabeel Second",
@@ -683,7 +870,10 @@
    "sales_change": 0.17917478573690326,
    "price_m2_last": 34760.40844441249,
    "price_m2_forecast": null,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.04237875255010157,
+   "pipeline_homes_next_12m": 564,
+   "price_change": null
   },
   {
    "area": "Al Thanyah First",
@@ -694,7 +884,10 @@
    "sales_change": -0.09040819497224872,
    "price_m2_last": 18859.590510744318,
    "price_m2_forecast": 18862.478985707305,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07199180209004678,
+   "pipeline_homes_next_12m": 41,
+   "price_change": 0.00015315682285588217
   },
   {
    "area": "Wadi Al Safa 7",
@@ -705,7 +898,10 @@
    "sales_change": 0.0638125147909614,
    "price_m2_last": 12540.678780668895,
    "price_m2_forecast": 14147.406625786682,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.06612714288813795,
+   "pipeline_homes_next_12m": 0,
+   "price_change": 0.12812128220639152
   },
   {
    "area": "Palm Jumeirah",
@@ -716,7 +912,10 @@
    "sales_change": 0.23480857980462289,
    "price_m2_last": 56569.09608071333,
    "price_m2_forecast": 60098.7277196728,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.02212273250635477,
+   "pipeline_homes_next_12m": 1236,
+   "price_change": 0.06239505107034704
   },
   {
    "area": "Wadi Al Safa 6",
@@ -727,7 +926,10 @@
    "sales_change": -0.05772127516597658,
    "price_m2_last": 14433.598500363263,
    "price_m2_forecast": 15609.868416157507,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": null,
+   "pipeline_homes_next_12m": 0,
+   "price_change": 0.0814952636908004
   },
   {
    "area": "Nad Al Shiba First",
@@ -738,7 +940,10 @@
    "sales_change": 0.11039523950630925,
    "price_m2_last": 19459.461540025164,
    "price_m2_forecast": 20822.33989149418,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.06310666258426194,
+   "pipeline_homes_next_12m": 754,
+   "price_change": 0.0700367966845219
   },
   {
    "area": "Al Hebiah Fifth",
@@ -749,7 +954,10 @@
    "sales_change": 0.102379857975754,
    "price_m2_last": 10110.996596742196,
    "price_m2_forecast": 10746.548779785991,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.08284526585700458,
+   "pipeline_homes_next_12m": 860,
+   "price_change": 0.06285752121097277
   },
   {
    "area": "Al Yelayiss 1",
@@ -760,7 +968,10 @@
    "sales_change": -0.19162049307776752,
    "price_m2_last": 13421.508514146191,
    "price_m2_forecast": 14169.608131376215,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": null,
+   "pipeline_homes_next_12m": 0,
+   "price_change": 0.055738862471497175
   },
   {
    "area": "Al Barshaa South Second",
@@ -771,7 +982,10 @@
    "sales_change": 0.19060702086197256,
    "price_m2_last": 14632.195634097574,
    "price_m2_forecast": 15461.707998719769,
-   "trend": "Declining"
+   "trend": "Declining",
+   "gross_yield_apartment": 0.07707466128986122,
+   "pipeline_homes_next_12m": 1430,
+   "price_change": 0.05669090171875313
   },
   {
    "area": "Dubai Investment Park First",
@@ -782,7 +996,10 @@
    "sales_change": 0.06772466924355669,
    "price_m2_last": 10471.974850069551,
    "price_m2_forecast": 10737.2482400011,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.06735706313731624,
+   "pipeline_homes_next_12m": 231,
+   "price_change": 0.025331744368139564
   },
   {
    "area": "Um Suqaim Third",
@@ -793,7 +1010,10 @@
    "sales_change": -0.11277725786774506,
    "price_m2_last": 27490.25241449962,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": 0.05117434852210003,
+   "pipeline_homes_next_12m": 238,
+   "price_change": null
   },
   {
    "area": "Jabal Ali Industrial Second",
@@ -804,7 +1024,10 @@
    "sales_change": 0.15796714542411094,
    "price_m2_last": 12652.714946974196,
    "price_m2_forecast": null,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.07785939421612995,
+   "pipeline_homes_next_12m": 420,
+   "price_change": null
   },
   {
    "area": "Dubai Investment Park Second",
@@ -815,7 +1038,10 @@
    "sales_change": 0.09349696117198625,
    "price_m2_last": 7552.817351551429,
    "price_m2_forecast": null,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.1074787013047245,
+   "pipeline_homes_next_12m": 0,
+   "price_change": null
   },
   {
    "area": "Mirdif",
@@ -826,7 +1052,10 @@
    "sales_change": 0.053552481512157746,
    "price_m2_last": 9539.88811831011,
    "price_m2_forecast": 10189.467645845756,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.055654078425137116,
+   "pipeline_homes_next_12m": 193,
+   "price_change": 0.06809089577150229
   },
   {
    "area": "Jumeirah First",
@@ -837,7 +1066,10 @@
    "sales_change": -0.08907842305990743,
    "price_m2_last": 28466.60425582816,
    "price_m2_forecast": 29608.829731737675,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.04506640938665064,
+   "pipeline_homes_next_12m": 0,
+   "price_change": 0.04012510468914332
   },
   {
    "area": "Zaabeel Second",
@@ -848,7 +1080,10 @@
    "sales_change": 0.028138744580268327,
    "price_m2_last": 28465.94970899705,
    "price_m2_forecast": null,
-   "trend": "Stable"
+   "trend": "Stable",
+   "gross_yield_apartment": 0.05005830153629755,
+   "pipeline_homes_next_12m": 564,
+   "price_change": null
   },
   {
    "area": "Al Kifaf",
@@ -859,7 +1094,10 @@
    "sales_change": 0.0246661560914061,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": 0.05305176328472731,
+   "pipeline_homes_next_12m": 476,
+   "price_change": null
   },
   {
    "area": "Madinat Hind 4",
@@ -870,7 +1108,10 @@
    "sales_change": -0.02362442965946343,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": 0.07894272691503028,
+   "pipeline_homes_next_12m": 1146,
+   "price_change": null
   },
   {
    "area": "Al Hebiah Sixth",
@@ -881,7 +1122,10 @@
    "sales_change": 0.310933484177234,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": null,
+   "pipeline_homes_next_12m": 0,
+   "price_change": null
   },
   {
    "area": "Al Goze Fourth",
@@ -892,7 +1136,10 @@
    "sales_change": 0.0635241799110966,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": 0.08846657338628298,
+   "pipeline_homes_next_12m": 0,
+   "price_change": null
   },
   {
    "area": "Al Safouh Second",
@@ -903,7 +1150,10 @@
    "sales_change": 0.27263522713439503,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": null,
+   "pipeline_homes_next_12m": 0,
+   "price_change": null
   },
   {
    "area": "Hor Al Anz",
@@ -914,7 +1164,10 @@
    "sales_change": 0.011490885765919279,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": null,
+   "pipeline_homes_next_12m": 0,
+   "price_change": null
   },
   {
    "area": "Al Safouh First",
@@ -925,7 +1178,10 @@
    "sales_change": 0.3084067270264268,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": 0.06334748695835174,
+   "pipeline_homes_next_12m": 0,
+   "price_change": null
   },
   {
    "area": "Madinat Hind 4",
@@ -936,7 +1192,10 @@
    "sales_change": 0.07852636292405024,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": 0.06754740022012329,
+   "pipeline_homes_next_12m": 1146,
+   "price_change": null
   },
   {
    "area": "Um Suqaim Third",
@@ -947,7 +1206,10 @@
    "sales_change": 0.7294679062671943,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": 0.049804138437665346,
+   "pipeline_homes_next_12m": 238,
+   "price_change": null
   },
   {
    "area": "Abu Hail",
@@ -958,7 +1220,10 @@
    "sales_change": -0.01657699785835498,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": null,
+   "pipeline_homes_next_12m": 0,
+   "price_change": null
   },
   {
    "area": "Muhaisanah First",
@@ -969,7 +1234,10 @@
    "sales_change": -0.023119554295295885,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": 0.06224252029606925,
+   "pipeline_homes_next_12m": 0,
+   "price_change": null
   },
   {
    "area": "Madinat Dubai Almelaheyah",
@@ -980,7 +1248,10 @@
    "sales_change": 0.4431441221137895,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": 0.04342606733201995,
+   "pipeline_homes_next_12m": 1931,
+   "price_change": null
   },
   {
    "area": "Al Rashidiya",
@@ -991,7 +1262,10 @@
    "sales_change": 0.11108325281659925,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": null,
+   "pipeline_homes_next_12m": 0,
+   "price_change": null
   },
   {
    "area": "Trade Center Second",
@@ -1002,7 +1276,10 @@
    "sales_change": 0.4760720246887937,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": 0.06548741005679787,
+   "pipeline_homes_next_12m": 83,
+   "price_change": null
   },
   {
    "area": "Al Bada",
@@ -1013,7 +1290,10 @@
    "sales_change": 0.44060802522847275,
    "price_m2_last": null,
    "price_m2_forecast": null,
-   "trend": null
+   "trend": null,
+   "gross_yield_apartment": null,
+   "pipeline_homes_next_12m": 0,
+   "price_change": null
   }
  ]
 }

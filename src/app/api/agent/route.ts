@@ -1,7 +1,7 @@
 import { openai } from "@ai-sdk/openai";
 import { generateText, stepCountIs, tool, type ModelMessage } from "ai";
 import { z } from "zod";
-import { areas, bookViewing, findAreas, freeSlots, matchBuyer, meta, searchListings, viewings, type Area, type Listing } from "@/lib/market";
+import { areas, bookViewing, rentalRoi, findAreas, freeSlots, matchBuyer, meta, searchListings, viewings, type Area, type Listing } from "@/lib/market";
 
 const withChange = (a: Area) => ({
   ...a,
@@ -11,6 +11,7 @@ const withChange = (a: Area) => ({
 const registration = z.enum(["Off-Plan", "Ready"]).optional();
 const brief = (l: Listing) => ({
   id: l.id, title: l.title, price_aed: l.price_aed, size_m2: l.size_m2, beds: l.beds, registration: l.registration, area_trend: l.area_trend,
+  annual_rent_aed: l.annual_rent_aed, gross_yield: l.gross_yield,
 });
 
 const tools = {
@@ -59,6 +60,11 @@ const tools = {
     inputSchema: z.object({ listingId: z.string(), slot: z.string(), buyer: z.string() }),
     execute: async ({ listingId, slot, buyer }) => bookViewing(listingId, slot, buyer),
   }),
+  rental_roi: tool({
+    description: "If the buyer buys a listing and rents it out: annual rent, gross and net yield, and years to repay, from DLD Ejari rents. runningCostsShare defaults to 0.25.",
+    inputSchema: z.object({ listingId: z.string(), runningCostsShare: z.number().min(0).max(0.9).optional(), price: z.number().optional() }),
+    execute: async ({ listingId, runningCostsShare, price }) => rentalRoi(listingId, runningCostsShare, price),
+  }),
   list_viewings: tool({
     description: "Viewings booked so far.",
     inputSchema: z.object({}),
@@ -77,6 +83,7 @@ Rules:
 - Money is in AED (UAE dirham), written like AED 1,250,000.
 - Listings are synthetic demo listings priced from real DLD price per m2. Say so if asked where they come from.
 - Market data is DLD sales to ${meta.dataTo}; ${meta.quarter} is provisional. Forecasts are for ${meta.forecastQuarter} and are a guide, not a promise.
+- For rent, ROI or what the buyer earns by renting a home out, use rental_roi and mention the running-costs assumption.
 - Before booking, get free slots and book only a slot from that list. Confirm with the date and time.
 - ${mode === "investor" ? "Lead with forecasts and area direction." : "Lead with what fits the budget today."}
 - The app shows every tool result as cards under your reply (listings, areas, slots, bookings). So reply in 1 to 3 short sentences: what you did, the one thing that matters most, and a next step. Do not list the listings or areas again, and use no numbered lists or tables.`;

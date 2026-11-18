@@ -18,6 +18,7 @@ const STEP_LABEL = {
   get_available_slots: 'Checked free slots',
   book_viewing: 'Booked a viewing',
   list_viewings: 'Read booked viewings',
+  rental_roi: 'Worked out the rental return',
 }
 
 const THINKING = ['Reading the brief', 'Searching listings', 'Checking the market data', 'Almost there']
@@ -25,12 +26,14 @@ const THINKING = ['Reading the brief', 'Searching listings', 'Checking the marke
 const fmtBy = (fmt) => (fmt === 'num' ? (v) => num(v) : fmt === 'pct' ? (v) => `${v.toFixed(0)}%` : (v) => money(v, v >= 1000 ? 0 : 2))
 
 /** **bold** → <strong>, newlines → paragraphs. */
-function Rich({ text }) {
-  return text.split('\n\n').map((para, p) => (
+function Rich({ text, caret }) {
+  const paras = text.split('\n\n')
+  return paras.map((para, p) => (
     <p key={p}>
       {para.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
         part.startsWith('**') && part.endsWith('**') ? <strong key={i}>{part.slice(2, -2)}</strong> : <Fragment key={i}>{part}</Fragment>,
       )}
+      {caret && p === paras.length - 1 ? <i className="caret" /> : null}
     </p>
   ))
 }
@@ -167,8 +170,7 @@ function Message({ m, onTyped, onSpot, onAsk, last }) {
           </div>
         ) : (
           <div className="bubble">
-            <Rich text={text} />
-            {typing || m.status === 'streaming' ? <i className="caret" /> : null}
+            <Rich text={text} caret={typing || m.status === 'streaming'} />
           </div>
         )}
         {done && m.steps?.length ? <AgentCards steps={m.steps} onAsk={onAsk} /> : null}

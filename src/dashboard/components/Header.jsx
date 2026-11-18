@@ -149,8 +149,9 @@ export default function Header({ title, sub }) {
   useEffect(() => {
     const place = () => {
       const r = slot.current?.getBoundingClientRect()
-      const pinned = !!r && r.top < PIN_TOP
-      setPinLeft(pinned ? r.left : null)
+      const rail = document.querySelector('.rail')?.getBoundingClientRect()
+      const pinned = !!r && !!rail && r.top < PIN_TOP
+      setPinLeft(pinned ? { left: rail.left, width: rail.width } : null)
       document.documentElement.classList.toggle('logo-pinned', pinned)
     }
     place()
@@ -170,7 +171,7 @@ export default function Header({ title, sub }) {
         <button
           type="button"
           className={`hdr-logo ${pinLeft != null ? 'pinned' : ''}`}
-          style={pinLeft != null ? { left: pinLeft } : undefined}
+          style={pinLeft ?? undefined}
           onClick={() => go('dashboard')}
           aria-label="Dashboard"
         >
