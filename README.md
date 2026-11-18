@@ -20,6 +20,26 @@ python -m unittest discover -s tests -v
 
 The backend and agent can load the validated snapshot with `from src.market_data import load_bundle`. It returns `monthly`, `trends`, `forecasts`, `forecast_manifest`, `quality`, and `names`. The frontend can consume those facts through the team's backend API.
 
+## Shortlist, compare and investor numbers
+
+`src/advisor/` turns the snapshot into buyer and investor answers. Every row returns its source dates,
+sales and rent-contract counts, segment scope (area, Ready or Off-Plan, flat or villa) and prices.
+
+```python
+from src.advisor.shortlist import shortlist, compare_areas, investment_numbers
+shortlist(1_500_000)                                   # buyer: typical price 50-100% of the budget
+shortlist(1_500_000, goal='invest')                    # investor: adds gross rental yield to the score
+compare_areas(['Dubai Marina', 'JVC'], property_kind='Apartment')
+investment_numbers('JVC', 'Ready', 'Apartment', 950_000, running_costs_share=0.25)
+```
+
+AED 1M and AED 5M give top-5 shortlists with nothing in common (`reports/advisor/budget_contrast.md`).
+Rents come from DLD Ejari rent contracts (`rent_monthly.csv`, new single-home contracts) and upcoming
+supply from DLD's project register (`supply_pipeline.csv`). Both are cleaned summaries; the raw exports stay
+out of Git. Rebuild them with `python -m src.dld_data.rents --input <rent csv parts>` and
+`python -m src.dld_data.supply --input <projects xlsx> --as-of <sales cutoff>`. Method and limits:
+[src/advisor/NOTES.md](src/advisor/NOTES.md).
+
 Refresh the snapshot with a complete official export when needed.
 
 ```bash
