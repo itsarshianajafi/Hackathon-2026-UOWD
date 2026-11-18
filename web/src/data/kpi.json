@@ -1,0 +1,199 @@
+{
+  "data_to": "2026-10-27",
+  "latest_quarter": "2026Q3",
+  "forecast_quarter": "2026Q4",
+  "sales_latest": 37493,
+  "sales_year_ago": 58783,
+  "sales_offplan_latest": 25615,
+  "sales_ready_latest": 11878,
+  "forecast_sales": 26979.532488818033,
+  "forecast_last_quarter": 30012.0,
+  "forecast_segments": 92,
+  "price_latest": 18417.716516840497,
+  "price_year_ago": 19188.039457236107,
+  "price_latest_offplan": 19603.962593760367,
+  "price_latest_ready": 15709.080599293828,
+  "trend_counts": {
+    "Rising": 7,
+    "Stable": 80,
+    "Declining": 1
+  },
+  "segments_labelled": 88,
+  "rising_areas": [
+    "Arjan",
+    "Down Town Jabal Ali",
+    "Dubai Studio City",
+    "International City Phase 3",
+    "Majan",
+    "Meydan Racecourse Community",
+    "The Valley"
+  ],
+  "monthly_sales": [
+    {
+      "month": "2024-10",
+      "offplan": 13234,
+      "ready": 7126
+    },
+    {
+      "month": "2024-11",
+      "offplan": 8437,
+      "ready": 5873
+    },
+    {
+      "month": "2024-12",
+      "offplan": 9425,
+      "ready": 5999
+    },
+    {
+      "month": "2025-01",
+      "offplan": 7390,
+      "ready": 6749
+    },
+    {
+      "month": "2025-02",
+      "offplan": 8935,
+      "ready": 6984
+    },
+    {
+      "month": "2025-03",
+      "offplan": 8999,
+      "ready": 6259
+    },
+    {
+      "month": "2025-04",
+      "offplan": 10152,
+      "ready": 7636
+    },
+    {
+      "month": "2025-05",
+      "offplan": 10135,
+      "ready": 8428
+    },
+    {
+      "month": "2025-06",
+      "offplan": 9704,
+      "ready": 6802
+    },
+    {
+      "month": "2025-07",
+      "offplan": 12675,
+      "ready": 7523
+    },
+    {
+      "month": "2025-08",
+      "offplan": 12827,
+      "ready": 5473
+    },
+    {
+      "month": "2025-09",
+      "offplan": 14342,
+      "ready": 5943
+    },
+    {
+      "month": "2025-10",
+      "offplan": 12966,
+      "ready": 6758
+    },
+    {
+      "month": "2025-11",
+      "offplan": 12660,
+      "ready": 6062
+    },
+    {
+      "month": "2025-12",
+      "offplan": 13421,
+      "ready": 5724
+    },
+    {
+      "month": "2026-01",
+      "offplan": 10849,
+      "ready": 6023
+    },
+    {
+      "month": "2026-02",
+      "offplan": 10561,
+      "ready": 6462
+    },
+    {
+      "month": "2026-03",
+      "offplan": 9667,
+      "ready": 4175
+    },
+    {
+      "month": "2026-04",
+      "offplan": 10276,
+      "ready": 3795
+    },
+    {
+      "month": "2026-05",
+      "offplan": 7577,
+      "ready": 2872
+    },
+    {
+      "month": "2026-06",
+      "offplan": 9964,
+      "ready": 3799
+    },
+    {
+      "month": "2026-07",
+      "offplan": 9666,
+      "ready": 4274
+    },
+    {
+      "month": "2026-08",
+      "offplan": 8367,
+      "ready": 3771
+    },
+    {
+      "month": "2026-09",
+      "offplan": 7582,
+      "ready": 3833
+    }
+  ],
+  "price_quarters": [
+    {
+      "quarter": "2024Q4",
+      "offplan": 18768.45840673559,
+      "ready": 14263.341182245611
+    },
+    {
+      "quarter": "2025Q1",
+      "offplan": 19509.620679204858,
+      "ready": 14845.336165784069
+    },
+    {
+      "quarter": "2025Q2",
+      "offplan": 20345.893373064977,
+      "ready": 15222.589241764908
+    },
+    {
+      "quarter": "2025Q3",
+      "offplan": 20957.53170928794,
+      "ready": 14898.895158436375
+    },
+    {
+      "quarter": "2025Q4",
+      "offplan": 21513.350507178024,
+      "ready": 15730.988786170436
+    },
+    {
+      "quarter": "2026Q1",
+      "offplan": 21692.871898724934,
+      "ready": 16160.305472677135
+    },
+    {
+      "quarter": "2026Q2",
+      "offplan": 20539.322773296917,
+      "ready": 15862.633842633793
+    },
+    {
+      "quarter": "2026Q3",
+      "offplan": 19603.962593760367,
+      "ready": 15709.080599293828
+    }
+  ],
+  "sales_change": -0.36217954170423416,
+  "forecast_change": -0.10104183363927655,
+  "price_change": -0.04014599522334783,
+  "offplan_share": 0.6831941962499667
+}

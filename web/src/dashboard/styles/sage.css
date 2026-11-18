@@ -1,0 +1,1075 @@
+/* ============================================================
+   Sage — the orb: a glass ball with two pill eyes.
+   lib/orbLife.js drives it through data-mood, data-sleep,
+   .blink / .startle and the --gx / --gy gaze variables.
+   ============================================================ */
+.orb {
+  --gx: -0.5;
+  --gy: -0.1;
+  --fx: 0.9;
+  --orb-glow: 198, 162, 107;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  animation: orbFloat 4.2s ease-in-out var(--float-delay, 0s) infinite;
+}
+@keyframes orbFloat {
+  50% {
+    translate: 0 calc(var(--s) * -0.05);
+  }
+}
+.orb i {
+  position: absolute;
+  font-style: normal;
+}
+.orb-ball {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(75% 50% at 50% 100%, rgba(255, 240, 214, 0.95), rgba(255, 240, 214, 0) 72%),
+    radial-gradient(60% 60% at 47% 44%, #7a5c30 0%, #9c7a47 42%, #c6a26b 64%, #dcc294 82%, #f5ecdc 100%);
+  box-shadow:
+    0 calc(var(--s) * 0.16) calc(var(--s) * 0.36) calc(var(--s) * -0.1) rgba(var(--orb-glow), 0.62),
+    0 calc(var(--s) * 0.03) calc(var(--s) * 0.08) rgba(var(--orb-glow), 0.2);
+  transition:
+    translate 0.6s var(--ease),
+    rotate 0.6s var(--spring),
+    scale 0.5s var(--spring),
+    filter 0.6s ease;
+}
+/* slow drifting light inside the glass */
+.orb-swirl {
+  inset: -25%;
+  border-radius: 50%;
+  background:
+    radial-gradient(28% 24% at 36% 40%, rgba(138, 107, 60, 0.9), rgba(138, 107, 60, 0)),
+    radial-gradient(26% 22% at 66% 64%, rgba(242, 244, 246, 0.6), rgba(242, 244, 246, 0));
+  filter: blur(calc(var(--s) * 0.07));
+  animation: spin 9s linear infinite;
+}
+/* frosted rim */
+.orb-rim {
+  inset: 0;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 calc(var(--s) * 0.07) calc(var(--s) * 0.015) rgba(255, 255, 255, 0.6),
+    inset 0 calc(var(--s) * 0.06) calc(var(--s) * 0.1) rgba(255, 255, 255, 0.35),
+    inset 0 calc(var(--s) * -0.05) calc(var(--s) * 0.12) rgba(255, 236, 200, 0.45);
+}
+.orb-shine {
+  left: 17%;
+  top: 9%;
+  width: 38%;
+  height: 22%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
+  rotate: -28deg;
+  opacity: 0.6;
+}
+
+/* ---------------- eyes (SVG, 100×100 user units) ---------------- */
+.orb-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.orb-eyes {
+  translate: calc(var(--gx) * 11px) calc(var(--gy) * 8px);
+  filter: drop-shadow(0 0 1.6px rgba(255, 255, 255, 0.55));
+  transition: translate 0.34s var(--ease);
+}
+.orb-eye {
+  transition:
+    translate 0.45s var(--spring),
+    scale 0.45s var(--spring),
+    rotate 0.45s var(--spring);
+}
+.orb-lid {
+  scale: var(--fx) 1;
+  transition: scale 0.09s ease-out;
+}
+.orb.blink .orb-lid {
+  scale: var(--fx) 0.08;
+}
+.orb-pill {
+  fill: #fff;
+  transition:
+    scale 0.35s var(--spring),
+    opacity 0.2s ease;
+}
+.orb-arc {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 4.4;
+  stroke-linecap: round;
+  opacity: 0;
+  scale: 0.6 0.2;
+  transition:
+    scale 0.4s var(--spring),
+    opacity 0.2s ease;
+}
+
+/* ---------------- moods ---------------- */
+/* happy, excited, wink: pills fold into smiling arcs */
+.orb:is([data-mood='happy'], [data-mood='excited']) .orb-pill,
+.orb[data-mood='wink'] .orb-eye.l .orb-pill,
+.sage-fab:hover .orb .orb-pill {
+  opacity: 0;
+  scale: 1 0.1;
+}
+.orb:is([data-mood='happy'], [data-mood='excited']) .orb-arc,
+.orb[data-mood='wink'] .orb-eye.l .orb-arc,
+.sage-fab:hover .orb .orb-arc {
+  opacity: 1;
+  scale: 1;
+}
+.orb[data-mood='happy'] .orb-ball {
+  animation: orbHop 0.75s var(--spring);
+}
+.orb[data-mood='excited'] .orb-ball {
+  animation: orbHop 0.6s var(--spring) 2;
+}
+.orb[data-mood='excited'] .orb-eye {
+  scale: 1.2;
+}
+.orb[data-mood='wink'] .orb-ball {
+  rotate: 8deg;
+}
+@keyframes orbHop {
+  30% {
+    translate: 0 calc(var(--s) * -0.14);
+    scale: 0.96 1.05;
+  }
+  60% {
+    translate: 0 0;
+    scale: 1.06 0.94;
+  }
+}
+
+/* concerned: lids drop, the ball sinks and loses some colour */
+.orb[data-mood='concerned'] .orb-eye {
+  scale: 1 0.58;
+  translate: 0 2.5px;
+}
+.orb[data-mood='concerned'] .orb-ball {
+  translate: 0 calc(var(--s) * 0.04);
+  filter: saturate(0.82) brightness(0.97);
+}
+
+/* confused: uneven eyes, head tilt */
+.orb[data-mood='confused'] .orb-eye.l {
+  scale: 1 0.55;
+}
+.orb[data-mood='confused'] .orb-eye.r {
+  scale: 1.15;
+}
+.orb[data-mood='confused'] .orb-ball {
+  rotate: -10deg;
+}
+
+/* thinking: eyes dart up (JS), one squints, the glass churns */
+.orb[data-mood='thinking'] .orb-eye.r {
+  scale: 1 0.78;
+}
+.orb[data-mood='thinking'] .orb-swirl {
+  animation-duration: 1.6s;
+}
+.orb[data-mood='thinking'] .orb-ball {
+  animation: orbPulse 1.2s ease-in-out infinite;
+}
+@keyframes orbPulse {
+  50% {
+    scale: 1.06;
+    box-shadow:
+      0 0 0 calc(var(--s) * 0.12) rgba(var(--orb-glow), 0.16),
+      0 calc(var(--s) * 0.16) calc(var(--s) * 0.36) calc(var(--s) * -0.1) rgba(var(--orb-glow), 0.62);
+  }
+}
+
+/* talking: eyes bounce with the words */
+.orb[data-mood='talking'] .orb-eye {
+  animation: orbTalk 0.34s ease-in-out infinite alternate;
+}
+.orb[data-mood='talking'] .orb-swirl {
+  animation-duration: 3s;
+}
+@keyframes orbTalk {
+  to {
+    scale: 1.06 0.8;
+  }
+}
+
+/* listening: wide eyes on the input */
+.orb[data-mood='listening'] .orb-eye {
+  scale: 1.08;
+}
+
+/* asleep after a while with nobody around */
+.orb[data-sleep] {
+  animation-duration: 7s;
+}
+.orb[data-sleep] .orb-lid {
+  scale: var(--fx) 0.1;
+  transition-duration: 0.9s;
+}
+.orb[data-sleep] .orb-ball {
+  filter: saturate(0.75) brightness(0.92);
+}
+.orb[data-sleep] .orb-swirl {
+  animation-duration: 20s;
+}
+.orb-z {
+  right: -8%;
+  top: -18%;
+  font-size: calc(var(--s) * 0.3);
+  font-weight: 700;
+  line-height: 1;
+  color: rgb(var(--orb-glow));
+  opacity: 0;
+  pointer-events: none;
+}
+.orb[data-sleep] .orb-z {
+  animation: orbZ 2.6s ease-out infinite;
+}
+@keyframes orbZ {
+  0% {
+    opacity: 0;
+    translate: 0 0;
+    scale: 0.6;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    translate: calc(var(--s) * 0.18) calc(var(--s) * -0.3);
+    scale: 1.1;
+  }
+}
+
+/* woken up: eyes pop open */
+.orb.startle .orb-eye {
+  scale: 1.3;
+}
+.orb.startle .orb-ball {
+  animation: orbHop 0.6s var(--spring);
+}
+
+/* ============================================================
+   Floating launcher
+   ============================================================ */
+.sage-fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  padding: 0 22px 0 11px;
+  border-radius: 999px;
+  background: var(--solid);
+  color: var(--on-solid);
+  font-size: 14.5px;
+  font-weight: 600;
+  box-shadow: 0 18px 40px -16px rgba(20, 30, 24, 0.6);
+  transition:
+    transform 0.4s var(--spring),
+    box-shadow 0.3s;
+  /* the pill opens out of its orb, where the flying Sage just landed */
+  animation: fabLand 0.7s var(--ease) backwards;
+}
+@keyframes fabLand {
+  from {
+    clip-path: circle(17px at 28px 50%);
+  }
+  to {
+    clip-path: circle(140% at 28px 50%);
+  }
+}
+.sage-fab.waiting {
+  visibility: hidden;
+  animation: none;
+}
+
+/* Sage's entrance (SageArrival): the orb that flies in on page load */
+.sage-arrival {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 160;
+  width: var(--size);
+  height: var(--size);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+}
+.sage-arrival-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.sage-arrival .orb {
+  display: block;
+}
+/* landing: squash, rebound and settle, then float while saying hello */
+.sage-arrival.hello .sage-arrival-body,
+.sage-arrival.leaving .sage-arrival-body {
+  animation:
+    arrivalBounce 0.75s cubic-bezier(0.3, 0.7, 0.4, 1) both,
+    arrivalFloat 1.8s ease-in-out 0.75s infinite;
+}
+@keyframes arrivalBounce {
+  0% {
+    scale: 1;
+    translate: 0 0;
+  }
+  16% {
+    scale: 1.14 0.86;
+    translate: 0 6px;
+  }
+  42% {
+    scale: 0.94 1.07;
+    translate: 0 -24px;
+  }
+  64% {
+    scale: 1.05 0.95;
+    translate: 0 2px;
+  }
+  82% {
+    scale: 0.99 1.01;
+    translate: 0 -6px;
+  }
+  100% {
+    scale: 1;
+    translate: 0 0;
+  }
+}
+@keyframes arrivalFloat {
+  50% {
+    translate: 0 -9px;
+  }
+}
+/* a soft ring spreads out where it lands */
+.sage-arrival-body::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(198, 162, 107, 0.55);
+  opacity: 0;
+}
+.sage-arrival.hello .sage-arrival-body::before {
+  animation: arrivalRing 0.9s ease-out 0.06s both;
+}
+@keyframes arrivalRing {
+  from {
+    opacity: 0.9;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+/* "I'm Sage, your dashboard AI" */
+.sage-arrival-says {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 18px);
+  padding: 11px 18px;
+  border-radius: 18px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  box-shadow: var(--shadow-pop);
+  opacity: 0;
+  transform: translate(-50%, 10px) scale(0.86);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.35s ease,
+    transform 0.55s var(--spring);
+}
+.sage-arrival-says b {
+  font-weight: 700;
+  background: linear-gradient(90deg, #a8844f, #c6a26b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.sage-arrival-says::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 12px;
+  height: 12px;
+  margin: -7px 0 0 -6px;
+  background: inherit;
+  border-radius: 0 0 4px 0;
+  transform: rotate(45deg);
+}
+.sage-arrival.hello .sage-arrival-says {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+  transition-delay: 0.1s;
+}
+.sage-arrival.leaving .sage-arrival-says {
+  opacity: 0;
+  transform: translate(-50%, -6px) scale(0.94);
+  transition-duration: 0.22s;
+}
+.sage-fab:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--sage) 22%, transparent),
+    0 22px 44px -16px rgba(20, 30, 24, 0.65);
+}
+.sage-fab:active {
+  transform: scale(0.95);
+}
+
+/* ============================================================
+   Panel
+   ============================================================ */
+.sage-panel {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  bottom: 16px;
+  width: 428px;
+  max-width: calc(100vw - 32px);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border-radius: 30px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-pop);
+  overflow: hidden;
+  transform: translateX(calc(100% + 40px)) scale(0.96);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 0.65s var(--ease),
+    opacity 0.4s,
+    visibility 0s linear 0.65s;
+}
+.sage-panel.open {
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    transform 0.65s var(--ease),
+    opacity 0.3s,
+    visibility 0s;
+}
+.sage-aura {
+  position: absolute;
+  inset: -20% -20% auto;
+  height: 320px;
+  background:
+    radial-gradient(260px 160px at 80% 30%, color-mix(in srgb, var(--sage) 26%, transparent), transparent 70%),
+    radial-gradient(220px 140px at 15% 10%, color-mix(in srgb, var(--sand-ink) 16%, transparent), transparent 70%);
+  pointer-events: none;
+  animation: auraShift 10s ease-in-out infinite alternate;
+}
+
+.sage-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 16px 14px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.sage-id {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  margin-left: 4px;
+}
+.sage-id strong {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+.sage-id small {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.on-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4fbf7a;
+  box-shadow: 0 0 0 3px rgba(79, 191, 122, 0.18);
+  flex-shrink: 0;
+}
+.icon-btn.lit {
+  background: var(--sage-soft);
+  color: var(--sage-ink);
+}
+.icon-btn:disabled {
+  opacity: 0.35;
+}
+
+.sage-body {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 18px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  scrollbar-width: thin;
+}
+
+/* welcome */
+.sage-hello {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 18px 4px 6px;
+}
+.hello-orb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-bottom: 18px;
+}
+.hello-orb::before,
+.hello-orb::after {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(198, 162, 107, 0.35);
+  animation: ripple 3s ease-out infinite;
+}
+.hello-orb::after {
+  animation-delay: 1.5s;
+}
+@keyframes ripple {
+  from {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+.sage-panel.open .hello-orb {
+  animation: popIn 0.8s var(--spring) 0.15s both;
+}
+.sage-hello h3 {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+.sage-hello h3 span {
+  background: linear-gradient(90deg, var(--sage-deep), var(--sage-2), var(--sand-ink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.sage-hello p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.55;
+  max-width: 330px;
+}
+.starters {
+  margin-top: 20px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.starter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  min-height: 58px;
+  border-radius: 16px;
+  background: var(--soft);
+  text-align: left;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--ink-2);
+  transition:
+    background-color 0.2s,
+    transform 0.35s var(--spring),
+    box-shadow 0.3s;
+}
+.sage-panel.open .starter {
+  animation: rise 0.6s var(--ease) both;
+  animation-delay: calc(0.25s + var(--i) * 0.06s);
+}
+.starter:hover {
+  background: var(--card);
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px var(--line-2),
+    var(--shadow-soft);
+}
+.starter span {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--sage-ink);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+/* messages */
+.msg {
+  display: flex;
+  gap: 10px;
+}
+.msg.user {
+  justify-content: flex-end;
+  animation: msgUser 0.5s var(--spring) both;
+}
+@keyframes msgUser {
+  from {
+    opacity: 0;
+    transform: translate(20px, 10px) scale(0.92);
+  }
+}
+.msg.user .bubble {
+  max-width: 84%;
+  padding: 10px 15px;
+  border-radius: 20px 20px 6px 20px;
+  background: var(--solid);
+  color: var(--on-solid);
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.msg.ai {
+  align-items: flex-start;
+  animation: rise 0.5s var(--ease) both;
+}
+.msg.ai > .orb {
+  margin-top: 2px;
+}
+.msg-col {
+  flex: 1;
+  min-width: 0;
+}
+.msg.ai .bubble {
+  display: inline-block;
+  max-width: 100%;
+  padding: 11px 15px;
+  border-radius: 6px 20px 20px 20px;
+  background: var(--soft);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.msg.ai .bubble p + p {
+  margin-top: 8px;
+}
+.msg.ai .bubble strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+.thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 15px;
+  border-radius: 6px 20px 20px 20px;
+  background: var(--soft);
+}
+.dots {
+  display: inline-flex;
+  gap: 4px;
+}
+.dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sage);
+  animation: bounce 1s ease-in-out infinite;
+}
+.dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+.thinking-txt {
+  font-size: 13px;
+  font-weight: 500;
+  background: linear-gradient(90deg, var(--muted) 30%, var(--ink) 50%, var(--muted) 70%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    shimmerText 1.4s linear infinite,
+    rise 0.35s var(--ease) both;
+}
+@keyframes shimmerText {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+/* answer blocks */
+.blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.ab {
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  padding: 12px 14px;
+  background: var(--card);
+  animation: rise 0.6s var(--ease) both;
+  animation-delay: calc(var(--i) * 110ms);
+}
+.ab-stat > span,
+.ab-spark > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.ab-stat > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+.ab-stat strong {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  font-variant-numeric: tabular-nums;
+}
+.ab-stats {
+  display: grid;
+  grid-template-columns: repeat(min(var(--n), 2), minmax(0, 1fr));
+  gap: 8px;
+  padding: 8px;
+}
+.ab-stats > div {
+  padding: 9px 11px;
+  border-radius: 12px;
+  background: var(--soft);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: popIn 0.5s var(--spring) both;
+  animation-delay: calc(var(--i) * 110ms + var(--k) * 70ms);
+}
+.ab-stats > div:nth-child(3):last-child {
+  grid-column: span 2;
+}
+.ab-stats > div.hot {
+  background: var(--sage-soft);
+}
+.ab-stats > div > span {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.ab-stats strong {
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.ab-stats > div.hot strong {
+  color: var(--sage-ink);
+}
+.ab-bars {
+  padding: 14px 12px 10px;
+}
+.spark.wide {
+  display: block;
+  width: 100%;
+  height: 56px;
+  margin-top: 6px;
+}
+.ab-progress > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.ab-progress span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.ab-progress strong {
+  font-size: 20px;
+  font-weight: 600;
+}
+.ab-progress > i {
+  display: block;
+  height: 10px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: var(--sage-soft);
+  overflow: hidden;
+}
+.ab-progress b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--sage-2), var(--sage-deep));
+  transform-origin: left;
+  animation: grow 1.2s var(--ease) 0.2s both;
+}
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+.ab-list {
+  padding: 6px 10px;
+}
+.ab-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 2px;
+  border-top: 1px solid var(--line);
+  animation: rise 0.5s var(--ease) both;
+  animation-delay: calc(var(--i) * 110ms + var(--k) * 60ms);
+}
+.ab-row:first-child {
+  border-top: 0;
+}
+.ab-dot {
+  width: 8px;
+  height: 30px;
+  border-radius: 4px;
+  background: var(--sage-3);
+  flex-shrink: 0;
+}
+.ab-dot.up {
+  background: var(--sage);
+}
+.ab-dot.down {
+  background: var(--ink-2);
+}
+.ab-row-txt {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.ab-row-txt strong {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ab-row-txt small {
+  font-size: 11.5px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ab-row em {
+  font-style: normal;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ab-row em.up {
+  color: var(--up);
+}
+.ab-row em.down {
+  color: var(--down);
+}
+
+.msg-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  animation: fadeIn 0.5s ease 0.2s both;
+}
+.engine {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.note {
+  font-size: 11px;
+  color: var(--amber);
+}
+.show-me {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--sage-soft);
+  color: var(--sage-ink);
+  font-size: 11.5px;
+  font-weight: 600;
+  transition: transform 0.3s var(--spring);
+}
+.show-me:hover {
+  transform: translateY(-1px);
+}
+
+/* footer & input */
+.sage-foot {
+  position: relative;
+  padding: 10px 14px 12px;
+  border-top: 1px solid var(--line);
+  background: var(--card);
+}
+.chips-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 10px;
+  margin: 0 -14px;
+  padding-inline: 14px;
+  mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 24px), transparent);
+}
+.chips-row::-webkit-scrollbar {
+  display: none;
+}
+.chip {
+  flex-shrink: 0;
+  height: 32px;
+  padding: 0 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+  white-space: nowrap;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    transform 0.25s var(--spring);
+  animation: rise 0.45s var(--ease) both;
+  animation-delay: calc(var(--i) * 60ms);
+}
+.chip:hover {
+  background: var(--sage-soft);
+  border-color: transparent;
+  color: var(--sage-ink);
+}
+.chip:active {
+  transform: scale(0.95);
+}
+.sage-input {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  border-radius: 22px;
+  border: 1px solid var(--line-2);
+  background: var(--soft);
+  padding: 6px 6px 6px 16px;
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s,
+    background-color 0.25s;
+}
+.sage-input:focus-within {
+  border-color: var(--sage);
+  background: var(--card);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--sage) 14%, transparent);
+}
+.sage-input textarea {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  resize: none;
+  font-size: 14.5px;
+  line-height: 1.4;
+  padding: 9px 0;
+  max-height: 120px;
+  field-sizing: content;
+}
+.send.stop {
+  background: var(--down);
+  color: #fff;
+}
+.sage-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 9px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+@media (max-width: 720px) {
+  .sage-panel {
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    border-radius: 0;
+    border: 0;
+    transform: translateY(100%);
+  }
+  .sage-fab {
+    right: 16px;
+    bottom: 90px;
+    padding: 0 11px;
+  }
+  .sage-fab .fab-txt {
+    display: none;
+  }
+}
