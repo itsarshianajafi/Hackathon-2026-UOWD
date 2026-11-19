@@ -1,4 +1,4 @@
-import { openai } from "@ai-sdk/openai";
+import { createChatModel, freeModelId } from "@/lib/openrouter";
 import { generateText, stepCountIs, tool } from "ai";
 import { z } from "zod";
 import { areas, bookViewing, rentalRoi, getNews, NEWS_TOPICS, findAreas, freeSlots, matchBuyer, meta, searchListings, listViewings, type Area, type Listing } from "@/lib/market";
@@ -106,11 +106,18 @@ const requestSchema = z.object({
 export async function POST(req: Request) {
   const parsed = requestSchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return Response.json({ error: "Invalid chat request. Send up to 40 user/assistant messages." }, { status: 400 });
-  if (!process.env.OPENAI_API_KEY) return Response.json({ error: "Chat is not configured. Ask the owner to set OPENAI_API_KEY." }, { status: 503 });
+  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+  if (!apiKey) return Response.json({ error: "Chat is not configured. Ask the owner to set OPENROUTER_API_KEY." }, { status: 503 });
+  let modelId: string;
+  try {
+    modelId = freeModelId();
+  } catch {
+    return Response.json({ error: "Chat requires a free model. Set ESTARO_MODEL to openrouter/free or a model ID ending in :free." }, { status: 503 });
+  }
   const { messages, mode, name } = parsed.data;
   try {
     const result = await generateText({
-      model: openai.chat(process.env.ESTARO_MODEL || "gpt-4.1-mini"),
+      model: createChatModel(apiKey, modelId),
       system: system(mode, name),
       messages,
       tools,
@@ -121,7 +128,8 @@ export async function POST(req: Request) {
     const steps = result.steps.flatMap((s) => s.toolResults.map((r) => ({ tool: r.toolName, input: r.input, output: r.output })));
     return Response.json({ text: result.text, steps });
   } catch (e) {
-    console.error("Agent request failed", e);
+    // SDK errors may contain request headers; never log the full error object.
+    console.error("OpenRouter agent request failed", e instanceof Error ? e.name : "UnknownError");
     return Response.json({ error: "The agent could not complete this request. Please try again." }, { status: 502 });
   }
 }

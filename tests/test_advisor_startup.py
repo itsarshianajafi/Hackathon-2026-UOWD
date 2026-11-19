@@ -249,33 +249,103 @@ class TestChatValidation:
 
 class TestAPIKeyStartup:
     def test_missing_key_raises(self, monkeypatch):
-        """The API must refuse to start if OPENAI_API_KEY is not set."""
-        monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+        """The API must refuse to start if OPENROUTER_API_KEY is not set."""
+        monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
         from src.advisor.api import _load_api_key
-        with pytest.raises(RuntimeError, match="OPENAI_API_KEY"):
+        with pytest.raises(RuntimeError, match="OPENROUTER_API_KEY"):
             _load_api_key()
 
     def test_invalid_key_raises(self, monkeypatch):
-        """A key that doesn't start with 'sk-' is rejected."""
-        monkeypatch.setenv("OPENAI_API_KEY", "not-a-real-key")
+        """A key that doesn't start with 'sk-or-' is rejected."""
+        monkeypatch.setenv("OPENROUTER_API_KEY", "not-a-real-key")
         from src.advisor.api import _load_api_key
-        with pytest.raises(RuntimeError, match="sk-"):
+        with pytest.raises(RuntimeError, match="sk-or-"):
             _load_api_key()
 
     def test_valid_key_prefix_accepted(self, monkeypatch):
-        monkeypatch.setenv("OPENAI_API_KEY", "sk-testkey123")
+        monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or-testkey123")
         from src.advisor.api import _load_api_key
         key = _load_api_key()
-        assert key == "sk-testkey123"
+        assert key == "sk-or-testkey123"
 
     def test_key_not_in_health_response(self, monkeypatch):
         """The /api/health endpoint must never include the API key in its response."""
         # We test the response dict directly (no live server needed).
-        monkeypatch.setenv("OPENAI_API_KEY", "sk-supersecret")
+        monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or-supersecret")
         from src.advisor import api
         # Patch _DATA so health() doesn't fail on empty dict
         monkeypatch.setattr(api, "_DATA", {"monthly": [], "forecasts": [], "trends": []})
         response = api.health()
         response_str = json.dumps(response)
-        assert "sk-supersecret" not in response_str
-        assert "OPENAI_API_KEY" not in response_str
+        assert "sk-or-supersecret" not in response_str
+        assert "OPENROUTER_API_KEY" not in response_str
+
+
+class TestOpenRouterModels:
+    @pytest.mark.parametrize("value", ["", "  ", "openrouter/free"])
+    def test_default_free_router(self, monkeypatch, value):
+        monkeypatch.setenv("ESTARO_MODEL", value)
+        from src.advisor.api import _load_model
+        assert _load_model() == "openrouter/free"
+
+    def test_explicit_free_model(self, monkeypatch):
+        monkeypatch.setenv("ESTARO_MODEL", "qwen/qwen3-4b:free")
+        from src.advisor.api import _load_model
+        assert _load_model() == "qwen/qwen3-4b:free"
+
+    @pytest.mark.parametrize("value", [
+        "gpt-4o", "openai/gpt-4o", "openrouter/auto",
+        "qwen/qwen3:free:online", "@preset/free", "qwen/qwen3:free?model=paid",
+    ])
+    def test_rejects_paid_models_and_overrides(self, monkeypatch, value):
+        monkeypatch.setenv("ESTARO_MODEL", value)
+        from src.advisor.api import _load_model
+        with pytest.raises(RuntimeError, match="ESTARO_MODEL"):
+            _load_model()
+
+    def test_stream_uses_openrouter_and_zero_pricing(self, monkeypatch):
+        import asyncio
+        from types import SimpleNamespace
+        import openai
+        from src.advisor import api
+
+        captured = {}
+
+        class Client:
+            def __init__(self, **kwargs):
+                captured["client"] = kwargs
+                self.chat = SimpleNamespace(completions=self)
+
+            async def create(self, **kwargs):
+                captured["request"] = kwargs
+
+                async def chunks():
+                    yield SimpleNamespace(choices=[SimpleNamespace(
+                        finish_reason="stop",
+                        delta=SimpleNamespace(content="Hello", tool_calls=None),
+                    )])
+                return chunks()
+
+            async def close(self):
+                captured["closed"] = True
+
+        monkeypatch.setattr(openai, "AsyncOpenAI", Client)
+        monkeypatch.setattr(api, "_API_KEY", "sk-or-test")
+        monkeypatch.setattr(api, "_MODEL", "openrouter/free")
+
+        async def collect():
+            return [chunk async for chunk in api._stream_chat([
+                {"role": "user", "content": "Hello"},
+            ], "buyer")]
+
+        chunks = asyncio.run(collect())
+        assert captured["client"]["base_url"] == "https://openrouter.ai/api/v1"
+        assert captured["request"]["model"] == "openrouter/free"
+        assert captured["request"]["extra_body"] == {"provider": {
+            "require_parameters": True,
+            "max_price": {"prompt": 0, "completion": 0, "request": 0},
+        }}
+        assert captured["request"]["tools"] == api.TOOLS
+        assert json.loads(chunks[0].removeprefix("data: "))["content"] == "Hello"
+        assert json.loads(chunks[-1].removeprefix("data: "))["type"] == "done"
+        assert captured["closed"] is True

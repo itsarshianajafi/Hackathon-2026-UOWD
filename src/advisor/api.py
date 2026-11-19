@@ -1,13 +1,13 @@
 """FastAPI backend for the Dubai Property Advisor.
 
 Security contract (Arina's deliverable):
-  - OPENAI_API_KEY is read once at startup from the environment; it is never
+  - OPENROUTER_API_KEY is read once at startup from the environment; it is never
     returned in any response or written to any log.
   - The app refuses to start if the key is absent or malformed.
   - The app starts cleanly even when allocation.csv does not exist.
   - Every endpoint validates inputs via Pydantic before touching data.
   - NaN / Inf values are sanitised with safe_float() before serialisation.
-  - OpenAI calls time out after CHAT_TIMEOUT_SECONDS and return a 503.
+  - OpenRouter calls time out after CHAT_TIMEOUT_SECONDS and emit an SSE error.
   - Internal errors log server-side; the client receives only a generic message.
 
 Run with:
@@ -18,6 +18,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
@@ -52,7 +53,7 @@ logger = logging.getLogger("advisor.api")
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
-CHAT_TIMEOUT_SECONDS = 30   # GPT-4o streaming timeout
+CHAT_TIMEOUT_SECONDS = 30   # OpenRouter streaming timeout
 MAX_TOOL_ROUNDS      = 5    # prevent infinite tool-call loops
 
 
@@ -60,31 +61,43 @@ MAX_TOOL_ROUNDS      = 5    # prevent infinite tool-call loops
 # Startup: validate key and load data once
 # ---------------------------------------------------------------------------
 _API_KEY: str = ""
+_MODEL: str = "openrouter/free"
 _DATA: dict = {}
 
 
 def _load_api_key() -> str:
-    """Read the OpenAI key from the environment. Fail fast if it's missing."""
-    key = os.environ.get("OPENAI_API_KEY", "").strip()
+    """Read the OpenRouter key from the environment. Fail fast if it's missing."""
+    key = os.environ.get("OPENROUTER_API_KEY", "").strip()
     if not key:
         raise RuntimeError(
-            "OPENAI_API_KEY is not set. "
-            "Add it to your .env file: OPENAI_API_KEY=sk-..."
+            "OPENROUTER_API_KEY is not set. "
+            "Set it in your shell before starting the API."
         )
-    if not key.startswith("sk-"):
+    if not key.startswith("sk-or-"):
         raise RuntimeError(
-            "OPENAI_API_KEY does not look valid (expected 'sk-...'). "
-            "Check your .env file."
+            "OPENROUTER_API_KEY does not look valid (expected 'sk-or-...'). "
+            "Check your environment."
         )
-    # Log only the key prefix so we can confirm it loaded, never the full key.
-    logger.info("OpenAI key loaded (prefix: %s...)", key[:7])
+    logger.info("OpenRouter key loaded")
     return key
+
+
+def _load_model() -> str:
+    model = os.environ.get("ESTARO_MODEL", "").strip() or "openrouter/free"
+    if model != "openrouter/free" and not re.fullmatch(
+        r"[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*:free", model
+    ):
+        raise RuntimeError(
+            "ESTARO_MODEL must be openrouter/free or an OpenRouter model ID ending in :free."
+        )
+    return model
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    global _API_KEY, _DATA
+    global _API_KEY, _MODEL, _DATA
     _API_KEY = _load_api_key()
+    _MODEL = _load_model()
     _DATA    = load_advisor_data()   # raises clearly if the 3 CSVs are missing
     logger.info(
         "Advisor data loaded — %d monthly rows, %d forecast rows, %d trend rows",
@@ -449,20 +462,29 @@ def _dispatch_tool(name: str, args: dict) -> str:
 
 
 async def _stream_chat(messages: list[dict], persona: str):
-    """Drive the GPT-4o tool-call loop and yield SSE chunks."""
+    """Drive the OpenRouter tool-call loop using only free models and yield SSE chunks."""
     from openai import AsyncOpenAI, APIConnectionError, APITimeoutError
 
-    client  = AsyncOpenAI(api_key=_API_KEY, timeout=CHAT_TIMEOUT_SECONDS)
+    client  = AsyncOpenAI(
+        api_key=_API_KEY,
+        base_url="https://openrouter.ai/api/v1",
+        timeout=CHAT_TIMEOUT_SECONDS,
+        default_headers={"X-Title": "Estaro"},
+    )
     system  = BUYER_SYSTEM_PROMPT if persona == "buyer" else INVESTOR_SYSTEM_PROMPT
     history = [{"role": "system", "content": system}, *messages]
 
     try:
         for _round in range(MAX_TOOL_ROUNDS):
             response = await client.chat.completions.create(
-                model="gpt-4o",
+                model=_MODEL,
                 messages=history,
                 tools=TOOLS,
                 stream=True,
+                extra_body={"provider": {
+                    "require_parameters": True,
+                    "max_price": {"prompt": 0, "completion": 0, "request": 0},
+                }},
             )
 
             # Accumulate the streamed response
@@ -540,26 +562,28 @@ async def _stream_chat(messages: list[dict], persona: str):
         yield f"data: {json.dumps({'type': 'error', 'message': 'Too many tool rounds. Please try a simpler question.'})}\n\n"
 
     except APITimeoutError:
-        logger.warning("OpenAI timeout after %ds", CHAT_TIMEOUT_SECONDS)
+        logger.warning("OpenRouter timeout after %ds", CHAT_TIMEOUT_SECONDS)
         yield (
             f"data: {json.dumps({'type': 'error', 'message': 'The AI advisor is taking too long. Please try again.'})}\n\n"
         )
     except APIConnectionError:
-        logger.warning("OpenAI connection error")
+        logger.warning("OpenRouter connection error")
         yield (
             f"data: {json.dumps({'type': 'error', 'message': 'Could not reach the AI service. Check your internet connection.'})}\n\n"
         )
-    except Exception:
-        # Log full traceback server-side; return a generic message to the client.
-        logger.exception("Unexpected error in chat stream")
+    except Exception as exc:
+        # SDK exceptions may contain request details; log only their type.
+        logger.error("Unexpected OpenRouter chat error: %s", type(exc).__name__)
         yield (
             f"data: {json.dumps({'type': 'error', 'message': 'Something went wrong. Please try again.'})}\n\n"
         )
+    finally:
+        await client.close()
 
 
 @app.post("/api/chat")
 async def chat(req: ChatRequest):
-    """Streaming GPT-4o chat endpoint. Returns Server-Sent Events."""
+    """Streaming OpenRouter chat endpoint. Returns Server-Sent Events."""
     messages = [{"role": m.role, "content": m.content} for m in req.messages]
     return StreamingResponse(
         _stream_chat(messages, req.persona),

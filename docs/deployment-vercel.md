@@ -48,13 +48,14 @@ Set these under **Project Settings → Environment Variables** before deploying:
 
 | Variable | Purpose |
 | --- | --- |
-| `OPENAI_API_KEY` | Server-only OpenAI key for chat; dashboards still render without it |
-| `ESTARO_MODEL` | Optional; defaults to `gpt-4.1-mini` |
+| `OPENROUTER_API_KEY` | Server-only OpenRouter key for chat; dashboards still render without it |
+| `ESTARO_MODEL` | Optional; defaults to `openrouter/free`; only this router or IDs ending in `:free` are accepted |
 | `DATABASE_URL` | Neon connection string; required for hosted bookings |
 
 Never prefix these with `NEXT_PUBLIC_`, commit their values, or paste keys into chat.
 Use appropriately scoped, separate secrets for Production and Preview, then
-redeploy after changing them. Set an OpenAI project budget/usage limit.
+redeploy after changing them. Model calls cap provider pricing at zero and never
+fall back to paid models. Free models remain subject to shared rate limits and availability.
 
 The website opens publicly without a username or password. `/api/health` does
 not reveal secrets. Chat and booking endpoints also have no login gate; review
@@ -72,7 +73,7 @@ Deploy from Vercel after the changes are pushed. Open the resulting HTTPS URL an
    again must not create a duplicate. Remove test data through the SQL editor.
 
 Builds/tests can run without live keys or a database. Database integration and
-OpenAI calls must still be checked against the actual deployed services.
+OpenRouter calls must still be checked against the actual deployed services.
 
 ## Local development
 
@@ -87,8 +88,8 @@ This is a public hackathon demo, not a multi-user production service. There is
 no authentication: if a database is connected, everyone sees the same viewing
 list. Do not enter real customer information. Use HTTPS only when hosted.
 
-Before enabling paid model calls on a public site, add distributed rate limiting
-and abuse controls; input limits alone do not prevent unwanted API spend. Before
+Add distributed rate limiting and abuse controls to preserve the shared free-model
+quota on a public site; input limits alone do not prevent quota exhaustion. Before
 serving real customers, add individual authentication, per-user booking
 authorization, a privacy/retention policy, and database backups. Bookings remain
 synthetic demo listings, and market/news snapshots do not refresh on deployment.

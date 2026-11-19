@@ -1,4 +1,4 @@
-"""GPT-4o system prompts and tool definitions for the advisor chat agent.
+"""System prompts and tool definitions for the OpenRouter advisor chat agent.
 
 The model never sees raw data — tools return structured dicts which the model
 explains in plain language. Numbers are always computed here, not by the model.

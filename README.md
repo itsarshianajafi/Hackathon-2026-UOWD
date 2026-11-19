@@ -25,21 +25,21 @@ npm run dev
 
 Open http://localhost:3000. The dashboards read JSON snapshots that are committed in `web/src/data/`, so the pages work without Python.
 
-The Estaro chat needs an OpenAI key. Create `web/.env.local`:
+The Estaro chat needs an OpenRouter key. Create `web/.env.local`:
 
 ```
-OPENAI_API_KEY=sk-...
-ESTARO_MODEL=gpt-4.1-mini
+OPENROUTER_API_KEY=sk-or-...
+ESTARO_MODEL=openrouter/free
 ```
 
-`ESTARO_MODEL` is optional and defaults to `gpt-4.1-mini`. Local viewings are saved in `web/.data/viewings.json`. When hosted on Vercel, bookings use Neon Postgres through `DATABASE_URL` instead.
+`ESTARO_MODEL` defaults to `openrouter/free`, which selects available free models with tool support. Specific model IDs ending in `:free` are also allowed; paid IDs are rejected and provider pricing is capped at zero. Free models have shared rate limits and availability, so a request may need a retry. See the [free router guide](https://openrouter.ai/docs/guides/routing/routers/free-router). Local viewings are saved in `web/.data/viewings.json`. When hosted on Vercel, bookings use Neon Postgres through `DATABASE_URL` instead.
 
 For a production build, run `npm run build` and then `npm start`.
 
 ### Deploy to Vercel
 
 Deploy the merged `main` branch with **Root Directory `web`** and **Node.js 24.x**.
-Connect Neon Postgres and set `OPENAI_API_KEY` and `DATABASE_URL` in Vercel
+Connect Neon Postgres and set `OPENROUTER_API_KEY` and `DATABASE_URL` in Vercel
 (not in Git). Initialize the booking table with `web/scripts/viewings.sql`.
 The site opens publicly without a username or password.
 
@@ -58,10 +58,10 @@ python -m unittest discover -s tests -v
 
 ### Advisor API (optional)
 
-The FastAPI backend in `src/advisor/api.py` reads `OPENAI_API_KEY` from the environment and refuses to start without it. It does not read `.env` files, so set the variable in your shell first.
+The FastAPI backend in `src/advisor/api.py` reads `OPENROUTER_API_KEY` from the environment and refuses to start without it. It uses the same free-only `ESTARO_MODEL` setting as the web app. It does not read `.env` files, so set the variable in your shell first.
 
 ```bash
-export OPENAI_API_KEY=sk-...        # PowerShell: $env:OPENAI_API_KEY="sk-..."
+export OPENROUTER_API_KEY=sk-or-... # PowerShell: $env:OPENROUTER_API_KEY="sk-or-..."
 uvicorn src.advisor.api:app --reload --port 8700
 ```
 
